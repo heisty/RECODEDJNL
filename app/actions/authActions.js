@@ -1,6 +1,6 @@
 import {SIGNIN_URL,SIGNUP_URL} from '../api';
 import axios from 'axios';
-
+import {addAlert} from './alertsActions';
 
 
 export const loginUser = (username,password) =>{
@@ -9,7 +9,7 @@ export const loginUser = (username,password) =>{
 			var {user_id,token} = response.data;
 			dispatch(authUser(user_id));
 		}).catch((error) =>{
-			
+			dispatch(addAlert('Could not login',true));
 		})
 	}
 }

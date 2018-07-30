@@ -1,25 +1,16 @@
 import uuid from 'uuid';
 
-var defaultState = [];
+var defaultState = {
+	alert: 'Please Login to manage your account',
+	canbe: false,
+}
 module.exports = (state=defaultState,action) =>{
 	switch(action.type){
-		case 'ADD_ALERT':
-			return [
-				...state,
-				{
-					text: action.text,
-					id: uuid.v4(),
-				}
-			]
-		case 'REMOVE_ALERT': 
-			return state.filter((alert) =>{
-				if(alert.id===action.id){
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
+		case 'STATUS_ALERT':
+		return {
+			alert: action.text,
+			canbe: action.canbe,
+		}
 		default:
 			return state;
 	}

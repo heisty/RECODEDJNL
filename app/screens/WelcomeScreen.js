@@ -7,7 +7,7 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import AlertContainer from '../components/Alert/AlertContainer';
+
 
 import {
 	Text,
@@ -69,7 +69,7 @@ class WelcomeScreen extends React.Component{
 				</Card>
 				<Card flex={1}>
 				</Card>
-				<AlertContainer />
+				
 			</Container>
 			);
 	}

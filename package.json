@@ -19,6 +19,7 @@
     "react-addons-update": "^15.6.2",
     "react-native": "0.55.4",
     "react-native-extended-stylesheet": "^0.8.1",
+    "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.9.3",
     "react-navigation-material-bottom-tabs": "^0.3.0",
     "react-redux": "^5.0.7",
