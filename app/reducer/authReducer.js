@@ -1,17 +1,18 @@
 
 
 var defaultState = {
-	user_id: undefined,
+	userid: undefined,
 }
 module.exports = (state=defaultState,action) =>{
 	switch(action.type){
 		case 'AUTH_USER':
 			return{
-				user_id: action.user_id, 
+				userid: action.userid, 
+				username: action.username
 			}
 		case 'UNAUTH_USER':
 			return{
-				user_id: undefined
+				userid: undefined
 			}
 		default:
 			return state;

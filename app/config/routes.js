@@ -89,6 +89,6 @@ const MainNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	}
-},{initialRouteName: 'bottomNavigation'})
+},{initialRouteName: 'componentNavigation'})
 
 module.exports = MainNavigation;

@@ -7,7 +7,7 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-
+import {loginCustomerUser} from '../actions/authActions';
 
 import {
 	Text,
@@ -22,43 +22,51 @@ class WelcomeScreen extends React.Component{
 	
 	  this.state = {
 
-	  	name: null,
-	  	placeholder: 'What is your name?',
+	  	username: null,
+	  	password: null,
+	  	usernamePlaceholder: 'What is your username?',
+	  	passwordPlaceholder: 'Secret Password',
 
 	  };
 	}
-	handleTextChange=(text)=>{
+	handleUsernameChange=(text)=>{
 		this.setState({
-			name: text,
+			username: text,
+		})
+		
+	};
+	handlePasswordChange=(text)=>{
+		this.setState({
+			password: text,
 		})
 		
 	};
 
+
 	nameSubmit=()=>{
 		if(this.state.name===null){
 			this.setState({
-				placeholder: 'Oops. We need a name',
+				placeholder: 'Oops. We need a username',
 			})
 		}
-
-		this.props.dispatch(addAlert('Holy'));
+		this.props.dispatch(loginCustomerUser(this.state.username,this.state.password));
+		
 
 	};
 	render(){
 		
 		const {navigate} = this.props.navigation;
-		if(this.props.user_id){
-			return(
-					<Main />
-				);
+		if(this.props.username){
+			navigate('Home');
 		}
 		return(
 			<Container>
 				
 				<Card flex={3} alignItems="center" justifyContent="center">
-					<Text>Hello there. Tell us your name.</Text>
+					<Text>Hello there. Tell us your name.{this.props.username}</Text>
 				{/*INPUT*/}
-					<Input onChangeText={this.handleTextChange} value={this.state.name} width={Dimensions.get('window').width-50} height={50} color="#000000" borderWidth={1} borderRadius={8} borderColor="#246C34" placeholder={this.state.placeholder} textAlign="center"/>
+					<Input onChangeText={this.handleUsernameChange} value={this.state.username} width={Dimensions.get('window').width-50} height={50} color="#000000" borderWidth={1} borderRadius={8} borderColor="#246C34" placeholder={this.state.usernamePlaceholder} textAlign="center"/>
+					<Input marginTop={10} onChangeText={this.handlePasswordChange} value={this.state.password} width={Dimensions.get('window').width-50} height={50} color="#000000" borderWidth={1} borderRadius={8} borderColor="#246C34" placeholder={this.state.passwordPlaceholder} textAlign="center"/>
 					<Button onPress={this.nameSubmit} backgroundColor="#246C34" alignItems="center" justifyContent="center" width={Dimensions.get('window').width-50} marginTop={10} height={50} borderWidth={1} borderRadius={8} borderColor="#246C34">
 						<Text style={[styles.header,{color: '#FFFFFF',fontSize: 20}]}>Customer Login</Text>
 					</Button>
@@ -80,8 +88,8 @@ class WelcomeScreen extends React.Component{
 var mapStateToProps = (state) =>{
 	return {
 		text: state.text,
-		name: state.name,
-		user_id: state.auth.user_id,
+		username: state.customer.customerUsername,
+		
 	}
 }
 

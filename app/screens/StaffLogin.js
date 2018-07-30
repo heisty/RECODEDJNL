@@ -16,12 +16,13 @@ import {
   Alert
 } from 'react-native';
 
-import {loginUser} from '../actions/authActions';
-import Main from './Main';
+import {loginStaffUser} from '../actions/authActions';
+import Home from './Home';
 
 
 
 class StaffLogin extends Component {
+
 
 
 // COnstructor
@@ -54,11 +55,9 @@ class StaffLogin extends Component {
   	};
   	//render
   render() {
-    if(this.props.user_id){
-      return(
-          <Main />
-        );
-    }
+    // if(this.props.userid){
+    //  this.props.navigation.navigate('Home');
+    // }
 // {this.props.canbe && Alert.alert("We couldn't log you in",'Please check your credentials',[{text: 'Okay'}],{cancelable:false})}
         
     
@@ -83,7 +82,7 @@ class StaffLogin extends Component {
 
 var mapStateToProps = (state) =>{
   return{
-    user_id: state.auth.user_id,
+    userid: state.staff.userid,
     text: state.alerts.alert,
     canbe: state.alerts.canbe,
   }

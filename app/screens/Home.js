@@ -20,6 +20,7 @@ import {
 class Home extends Component {
   render() {
   	const { width,height } = Dimensions.get('window');
+    const { userid,username } = this.props;
     return(
       <Container>
       	<Card>
@@ -27,7 +28,7 @@ class Home extends Component {
 
       			<Card backgroundColor="teal" alignItems="center" justifyContent="center" width={width} height={100}>
       				<Text style={styles.header}>Good Day!</Text>
-      				<Text style={[styles.header,{fontSize: 20,color: '#FFFFFF'}]}>Juan</Text>
+      				<Text style={[styles.header,{fontSize: 20,color: '#FFFFFF'}]}>{username}</Text>
       			</Card>
 
       		{/*End Greet*/}
@@ -63,6 +64,10 @@ class Home extends Component {
   }
 }
 
+var mapStateToProps = (state) => {
+  return {
+    username: state.customer.customerUsername,
+  }
+}
 
-
-module.exports = Home;
+module.exports = connect(mapStateToProps)(Home);
