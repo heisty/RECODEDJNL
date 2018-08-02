@@ -16,16 +16,19 @@ import {
   Text,
   Dimensions
 } from 'react-native';
-
+import {getServices} from '../actions/populateActions';
 class Services extends Component {
   // 
-
+  //   componentWillMount(){
+  //   this.props.dispatch(getServices());
+  // }
   servicePress = () =>{
 
   }
 
   render() {
   	const { width,height } = Dimensions.get('window');
+    //console.warn(this.props.services);
     return(
       		
 
@@ -39,12 +42,12 @@ class Services extends Component {
       	{/**/}
       		{/*RENDER SERVICES*/}
       		<FlatList
-      			data={services}
+      			data={this.props.services}
       			renderItem={({item})=> {
       				return(
                 <Card  alignItems="center" justifyContent="center">
       						<Button onPress={()=> this.props.navigation.navigate('Modal',{service: item})} marginTop={10} backgroundColor="#FFFFFF" borderWidth={1} borderColor="teal" borderRadius={5} alignItems="center" justifyContent="center" width={width-50} height={60}>
-                       <Text style={[styles.header],{color: 'teal',fontSize: 20}}>{item.title} -- {item.price}</Text>   
+                       <Text style={[styles.header],{color: 'teal',fontSize: 20,}}>{item.title} -- PHP {item.price}</Text>   
                   </Button>
                 </Card>
       					);
@@ -60,4 +63,13 @@ class Services extends Component {
 }
 
 
-module.exports = Services;
+
+
+var mapStateToProps = (state) => {
+  return {
+    services: state.services.services,
+    errorpop: state.services.pop_error,
+  }
+}
+
+module.exports = connect(mapStateToProps)(Services);

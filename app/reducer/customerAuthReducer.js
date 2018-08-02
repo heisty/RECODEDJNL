@@ -1,6 +1,9 @@
 var defaultState = {
-	customerId: undefined,
-	customerUsername: undefined,
+	customerId: null,
+	customerUsername: null,
+	customerUsernameNotOnline: null,
+	customerPasswordNotOnline: null
+
 }
 module.exports = (state={},action) =>{
 	switch(action.type){
@@ -10,6 +13,11 @@ module.exports = (state={},action) =>{
 			customerUsername: action.username,
 
 		}
+	case "NOT_ONLINE_USER":
+			return{
+				customerUsernameNotOnline: action.username,
+				customerPasswordNotOnline: action.password,
+			}
 	default: 
 		return state
 	}

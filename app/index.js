@@ -2,6 +2,7 @@ import React from 'react';
 import {configureStore} from './store';
 import {Provider} from 'react-redux';
 import App from './config/routes';
+//import { NetworkInfo } from 'react-native-network-info';
 //import {View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 //import AlertContainer from './components/Alert/AlertContainer';
@@ -17,6 +18,7 @@ EStyleSheet.build({
 	$primaryGrey: '#FF5722',
 })
 class index extends React.Component{
+		
 	render(){
 		return(
 

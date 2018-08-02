@@ -9,6 +9,7 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
+import {getServices} from '../actions/populateActions';
 // 
 
 import {
@@ -18,6 +19,15 @@ import {
 } from 'react-native';
 
 class Home extends Component {
+
+
+  componentWillMount(){
+    this.props.dispatch(getServices());
+    if(!this.props.usernameNotOnline){
+      console.warn("You are not connected to the internet or our server.");
+    }
+  }
+
   render() {
   	const { width,height } = Dimensions.get('window');
     const { userid,username } = this.props;
@@ -67,6 +77,7 @@ class Home extends Component {
 var mapStateToProps = (state) => {
   return {
     username: state.customer.customerUsername,
+    usernameNotOnline: state.customer.customerUsernameNotOnline,
   }
 }
 
