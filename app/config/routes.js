@@ -9,6 +9,7 @@ import Services from '../screens/Services';
 import Crew from '../screens/Crew';
 import Feedback from '../screens/Feedback';
 import Purchase from '../screens/Purchase';
+import FillUpForm from '../screens/FillUpForm';
 import {
 	Image,
 	Dimensions
@@ -19,6 +20,7 @@ const bottomNavigation = createMaterialBottomTabNavigator({
 		screen: Home,
 		navigationOptions: {
 			tabBarLabel: 'Home',
+			tabBarColor: 'green',
 			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/home.png')}/>
 		}
 	},
@@ -26,6 +28,7 @@ const bottomNavigation = createMaterialBottomTabNavigator({
 		screen: Services,
 		navigationOptions: {
 			tabBarLabel: 'Services',
+			tabBarColor: 'teal',
 			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/salon.png')}/>
 		}
 	},
@@ -33,6 +36,7 @@ const bottomNavigation = createMaterialBottomTabNavigator({
 		screen: Crew,
 		navigationOptions: {
 			tabBarLabel: 'Crew',
+			tabBarColor: 'purple',
 			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/crew.png')}/>
 		}
 	},
@@ -40,15 +44,16 @@ const bottomNavigation = createMaterialBottomTabNavigator({
 		screen: Feedback,
 		navigationOptions: {
 			tabBarLabel: 'Feedback',
+			tabBarColor: 'darkred',
 			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/feedback.png')}/>
 		}
 	}
 },{
   initialRouteName: 'Home',
-  shifting: false,
+  shifting: true,
   activeTintColor: '#FFFFFF',
-  inactiveTintColor: '#4CAF50',
-  barStyle: { backgroundColor: '#246C34',width: Dimensions.get('window').width,height: Dimensions.get('window').width/5,alignItems: 'center',justifyContent:'center' }
+  inactiveTintColor: '#FFFFFF',
+  barStyle: { backgroundColor: 'gray',width: Dimensions.get('window').width,height: Dimensions.get('window').width/5,alignItems: 'center',justifyContent:'center',padding: 28 }
 });
 
 const componentNavigation = createStackNavigator({
@@ -85,6 +90,12 @@ const MainNavigation = createStackNavigator({
 	},
 	Modal: {
 		screen: Purchase,
+		navigationOptions: {
+			header: ()=> null
+		}
+	},
+	FillUpForm: {
+		screen: FillUpForm,
 		navigationOptions: {
 			header: ()=> null
 		}

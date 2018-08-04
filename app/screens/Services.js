@@ -9,25 +9,46 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {services} from '../inappData/services';
+//import {services} from '../inappData/services';
 import {
   View,
   FlatList,
   Text,
   Dimensions
 } from 'react-native';
-import {getServices} from '../actions/populateActions';
+import {getServices,getStaff} from '../actions/populateActions';
 class Services extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      services: null
+    };
+  }
   // 
-  //   componentWillMount(){
-  //   this.props.dispatch(getServices());
-  // }
+  componentDidMount(){
+       this.setState({
+      services: this.props.services
+
+    })
+    // setInterval(()=>{
+    //   this.props.dispatch(getStaff());
+    //   this.props.dispatch(getServices());
+    //   this.setState({
+    //   services: this.props.services
+
+    // })
+    // },1000)
+  }  
   servicePress = () =>{
 
   }
 
   render() {
+
   	const { width,height } = Dimensions.get('window');
+    
+    console.warn(this.state.services);
     //console.warn(this.props.services);
     return(
       		
@@ -42,7 +63,7 @@ class Services extends Component {
       	{/**/}
       		{/*RENDER SERVICES*/}
       		<FlatList
-      			data={this.props.services}
+      			data={this.state.services}
       			renderItem={({item})=> {
       				return(
                 <Card  alignItems="center" justifyContent="center">

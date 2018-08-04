@@ -8,6 +8,14 @@ module.exports = (state=defaultState,action)=>{
 			return{
 				services: action.services
 			}
+		case "POPULATE_STAFF":
+			return{
+				staff: action.staff,
+			}
+		case "ACTIVE_SERVICES":
+			return{
+				activeServices: action.activeservices
+			}
 		case "ERROR_DISPATCH":
 			return{
 				pop_error: action.text

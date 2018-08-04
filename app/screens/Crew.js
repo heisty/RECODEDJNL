@@ -9,16 +9,21 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {staff} from '../inappData/staff';
+//import {staff} from '../inappData/staff';
 import {
   Text,
   Dimensions,
   FlatList
 } from 'react-native';
+import {getStaff} from '../actions/populateActions';
 
 class Crew extends Component {
+  componentWillMount(){
+    this.props.dispatch(getStaff());
+  }
   render() {
   	const { height,width } = Dimensions.get('window');
+    var { staff } = this.props;
     return (
       <Container>
       	<Card>
@@ -40,7 +45,7 @@ class Crew extends Component {
               );
           }}
 
-          keyExtractor={(item)=> item.name}
+          keyExtractor={(item)=> item._id}
 
           />
 
@@ -52,4 +57,11 @@ class Crew extends Component {
 
 
 
-module.exports = Crew;
+var mapStateToProps = (state) =>{
+  return{
+    staff: state.services.staff,
+  }
+}
+
+
+module.exports = connect(mapStateToProps)(Crew);

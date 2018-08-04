@@ -11,12 +11,20 @@ import {loginCustomerUser} from '../actions/authActions';
 
 import {
 	Text,
-	Dimensions
+	Dimensions,
+	Alert,
+	BackHandler
 } from 'react-native';
 import Main from './Main';
 
 
 class WelcomeScreen extends React.Component{
+	componentDidMount(){
+		// BackHandler.addEventListener('hardwareBackPress',function(){
+		// 	Alert.alert("You are about to exit the app.",'Exit the application?',[{text: 'Okay'}],{cancelable:true})
+		// 	return false;
+		// });
+	}
 	constructor(props) {
 	  super(props);
 	
@@ -26,6 +34,7 @@ class WelcomeScreen extends React.Component{
 	  	password: null,
 	  	usernamePlaceholder: 'What is your username?',
 	  	passwordPlaceholder: 'Secret Password',
+	  	
 
 	  };
 	}
@@ -41,6 +50,7 @@ class WelcomeScreen extends React.Component{
 		})
 		
 	};
+
 
 
 	nameSubmit=()=>{
@@ -63,7 +73,7 @@ class WelcomeScreen extends React.Component{
 			<Container>
 				
 				<Card flex={3} alignItems="center" justifyContent="center">
-					<Text>Hello there. Tell us your name.{this.props.username}</Text>
+					<Text>Hello there. Tell us your name.</Text>
 				{/*INPUT*/}
 					<Input onChangeText={this.handleUsernameChange} value={this.state.username} width={Dimensions.get('window').width-50} height={50} color="#000000" borderWidth={1} borderRadius={8} borderColor="#246C34" placeholder={this.state.usernamePlaceholder} textAlign="center"/>
 					<Input marginTop={10} onChangeText={this.handlePasswordChange} value={this.state.password} width={Dimensions.get('window').width-50} height={50} color="#000000" borderWidth={1} borderRadius={8} borderColor="#246C34" placeholder={this.state.passwordPlaceholder} textAlign="center"/>

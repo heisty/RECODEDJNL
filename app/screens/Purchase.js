@@ -9,24 +9,82 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {staff} from '../inappData/staff';
+import {availServices,availServiceDelete,alreadyHaveService} from '../actions/availActions';
+//import {staff} from '../inappData/staff';
 
 import {
   Text,
   Dimensions,
   ScrollView,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
+import {getStaff} from '../actions/populateActions';
 
 class Purchase extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      selectedPersona: null,
+      staffid: null,
+    };
+  }
+
+  handleAvail=(serviceId,title)=>{
+
+    this.props.dispatch(alreadyHaveService(this.props.userid));
+    let canAvail = this.props.canAvail;
+    if(canAvail)
+    {
+    let servicetype="home";
+    this.props.dispatch(availServices(this.props.userid,serviceId,servicetype,this.state.staffid,title));
+    }
+    else{
+       Alert.alert(
+        'A service is active',
+        'You cannot book while a service is active',
+        [
+          {text: 'Okay'}
+        ],
+        {cancelable: false}
+        );
+    }
+  }
+  
+  componentDidMount(){
+     this.props.dispatch(getStaff());
+  }
+  // render FlatList
+
   render() {
-  	const { service } = this.props.navigation.state.params;
+    //OUR FAILSAFE MUST BE ADDED OUT Set return iS AUTO 1
+
+    var { staff,userid,availState } = this.props;
+  	var { service } = this.props.navigation.state.params;
+    var { navigate } = this.props.navigation;
   	const { width,height } = Dimensions.get('window');
+
+    if(availState===1){
+      Alert.alert(
+        'Service Booked!',
+        'Okay, thats great. Your service is underway.',
+        [
+          {text: 'Okay'}
+        ],
+        {cancelable: false}
+        );
+
+      this.props.dispatch(availServiceDelete());
+    }
     return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:"#FFFFFF"}}>
       <Container>
+
       <Card width={width} height={240} backgroundColor="#246C34">
+
       	<Card alignItems="center" justifyContent="center" backgroundColor="teal" width={width} height={200}>
+
       				
       			<Text style={[styles.header],{color: 'white',fontSize: 25}}>{service.title}</Text>	
       			<Card marginTop={20} width={width-20}>
@@ -37,27 +95,28 @@ class Purchase extends Component {
       	{/*PROFILES*/}
 
 
-      	<Card justifyContent="center" width={width} height={240} backgroundColor="#246C34">
+      	<Card justifyContent="center" width={width} height={180} backgroundColor="#246C34">
       	 <Text style={[styles.header,{color: '#FFFFFF',fontSize: 15}]}>Swap Left to Right</Text>
-        <Card width={width} height={200}  backgroundColor="white" justifyContent="center">
+        <Card width={width} height={100}  backgroundColor="white" justifyContent="center">
       {/*FLAT LIST OF STAFF*/}
       
         <FlatList 
           data={staff}
           horizontal={true}
           renderItem={({item})=> {
+            var username = item.username;
+            var id = item._id;
             return(
-              <Button alignItems="center"  justifyContent="space-between">
-                <Card width={width/2} margin={10} height={190} borderRadius={8} backgroundColor="gray">
-                  <Text>{item.name}</Text>
-                </Card>
-              </Button>
              
+              <Button onPress={()=> this.setState({selectedPersona: username,staffid:id}) } alignItems="center"  justifyContent="space-between" width={80} margin={10} height={80} borderRadius={360} backgroundColor="gray">
+                  <Text>{item.username}</Text>
+              </Button>
+            
 
               );
           }}
 
-          keyExtractor={(item)=> item.name}
+          keyExtractor={(item)=> item._id}
 
         
           />
@@ -65,6 +124,7 @@ class Purchase extends Component {
       {/**/}
       	</Card>
       	<Text style={[styles.header,{color: '#FFFFFF',fontSize: 15}]}>Please choose your desired massager or employee.</Text>
+        {this.state.selectedPersona && <Text style={[styles.header,{color: '#FFFFFF',fontSize: 25}]}>You chose {this.state.selectedPersona}</Text>}
       	</Card>
 
 
@@ -72,16 +132,22 @@ class Purchase extends Component {
 
       	{/**/}
       {/*AVAIL*/}
+       <Card marginTop={10} alignItems="center" justifyContent="center">
+          <Button onPress={()=> navigate('Services')} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
+            <Text>GO BACK</Text>
+          </Button>
+        </Card>
       	<Card marginTop={10} alignItems="center" justifyContent="center">
-      		<Button alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
+      		<Button onPress={()=>this.handleAvail(service._id,service.title)} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
       			<Text>Avail</Text>
       		</Button>
       	</Card>
       	<Card marginTop={10} alignItems="center" justifyContent="center">
-      		<Button alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
+      		<Button onPress={()=> navigate('FillUpForm')} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
       			<Text>Avail for Home Service</Text>
       		</Button>
       	</Card>
+         
 
       </Container>
       </ScrollView>
@@ -89,7 +155,15 @@ class Purchase extends Component {
   }
 }
 
+var mapStateToProps = (state) =>{
+  return{
+    staff: state.services.staff,
+    services: state.services.services,
+    userid: state.customer.customerId,
+    availState: state.alerts.availState,
+    canAvail: state.alerts.canAvail
+  }
+}
 
 
-
-module.exports = Purchase;
+module.exports = connect(mapStateToProps)(Purchase);

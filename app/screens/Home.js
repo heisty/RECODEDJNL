@@ -9,28 +9,39 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {getServices} from '../actions/populateActions';
+import {getServices,getStaff} from '../actions/populateActions';
+import {returnActiveServices} from '../actions/availActions';
 // 
 
 import {
   View,
   Text,
-  Dimensions
+  Dimensions,
+  FlatList
 } from 'react-native';
 
 class Home extends Component {
 
 
   componentWillMount(){
+    // this to fill the services list
+   
     this.props.dispatch(getServices());
+    
     if(!this.props.usernameNotOnline){
       console.warn("You are not connected to the internet or our server.");
     }
+    //to fill the casts
+    //this.props.dispatch(getStaff());
+
+  }
+  componentDidMount(){
+    this.props.dispatch(returnActiveServices(this.props.userid));
   }
 
   render() {
   	const { width,height } = Dimensions.get('window');
-    const { userid,username } = this.props;
+    const { userid,username,activeServices } = this.props;
     return(
       <Container>
       	<Card>
@@ -58,8 +69,13 @@ class Home extends Component {
 
         {/* TOP PIC*/}
         	<Card alignItems="center" justifyContent="center" width={width} height={30} backgroundColor='#246C34'>
-        		<Text style={[styles.header,{fontSize: 15}]}>Try our featured services</Text>
+        		<Text style={[styles.header,{fontSize: 15}]}>My Active Services</Text>
         	</Card>
+          <FlatList 
+          data={activeServices}
+          renderItem={({item})=><Text>item._id</Text>}
+          keyExtractor={(item)=> item._id}
+          />
 
 
         	<Card alignItems="center" justifyContent="center" width={width} height={30}>
@@ -78,6 +94,7 @@ var mapStateToProps = (state) => {
   return {
     username: state.customer.customerUsername,
     usernameNotOnline: state.customer.customerUsernameNotOnline,
+    activeServices: state.services.activeServices,
   }
 }
 
