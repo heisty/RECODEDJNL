@@ -15,13 +15,25 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
-import {getStaff} from '../actions/populateActions';
+
 
 class Crew extends Component {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+
+      staff: null
+
+    };
+  }
   componentWillMount(){
-    this.props.dispatch(getStaff());
+    this.setState({
+      staff: this.props.staff,
+    })
   }
   render() {
+    console.warn(this.state.staff);
   	const { height,width } = Dimensions.get('window');
     var { staff } = this.props;
     return (
@@ -59,7 +71,7 @@ class Crew extends Component {
 
 var mapStateToProps = (state) =>{
   return{
-    staff: state.services.staff,
+    staff: state.customer.staff,
   }
 }
 

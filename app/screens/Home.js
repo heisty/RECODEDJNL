@@ -9,8 +9,8 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {getServices,getStaff} from '../actions/populateActions';
-import {returnActiveServices} from '../actions/availActions';
+import {populateDispatcher,populateStaff} from '../actions/PopulateDispatcher';
+
 // 
 
 import {
@@ -22,24 +22,15 @@ import {
 
 class Home extends Component {
 
-
+// COMPONENT WILL MOUNT
   componentWillMount(){
-    // this to fill the services list
-   
-    this.props.dispatch(getServices());
-    
-    if(!this.props.usernameNotOnline){
-      console.warn("You are not connected to the internet or our server.");
-    }
-    //to fill the casts
-    //this.props.dispatch(getStaff());
-
+    this.props.dispatch(populateDispatcher());
+    this.props.dispatch(populateStaff());
   }
-  componentDidMount(){
-    this.props.dispatch(returnActiveServices(this.props.userid));
-  }
+ // RENDER
 
-  render() {
+  render(){
+
   	const { width,height } = Dimensions.get('window');
     const { userid,username,activeServices } = this.props;
     return(
@@ -73,7 +64,7 @@ class Home extends Component {
         	</Card>
           <FlatList 
           data={activeServices}
-          renderItem={({item})=><Text>item._id</Text>}
+          renderItem={({item})=><Text>{item.servicename}</Text>}
           keyExtractor={(item)=> item._id}
           />
 
@@ -92,9 +83,8 @@ class Home extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    username: state.customer.customerUsername,
-    usernameNotOnline: state.customer.customerUsernameNotOnline,
-    activeServices: state.services.activeServices,
+   
+    
   }
 }
 

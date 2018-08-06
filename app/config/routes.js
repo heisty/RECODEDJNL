@@ -10,6 +10,7 @@ import Crew from '../screens/Crew';
 import Feedback from '../screens/Feedback';
 import Purchase from '../screens/Purchase';
 import FillUpForm from '../screens/FillUpForm';
+import {connect} from 'react-redux';
 import {
 	Image,
 	Dimensions

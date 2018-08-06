@@ -2,8 +2,8 @@ import {POPULATE_SERVICES,POPULATE_STAFF} from '../api';
 import axios from 'axios';
 
 export const getServices = () =>{
-	return function(dispatch){
-		return  axios.post(POPULATE_SERVICES).then((response)=>{
+	return async function(dispatch){
+		return await axios.post(POPULATE_SERVICES).then((response)=>{
 			
 			var services = response.data.services;
 			dispatch(populateServices(services));
@@ -34,8 +34,8 @@ const popError = (text) =>({
 });
 
 export const getStaff = () =>{
-	return function(dispatch){
-		return axios.post(POPULATE_STAFF).then((response)=>{
+	return async function(dispatch){
+		return await axios.post(POPULATE_STAFF).then((response)=>{
 			var staff = response.data.staff;
 			dispatch(populateStaff(staff));
 			//console.warn(staff);

@@ -16,40 +16,26 @@ import {
   Text,
   Dimensions
 } from 'react-native';
-import {getServices,getStaff} from '../actions/populateActions';
 class Services extends Component {
   constructor(props) {
     super(props);
   
     this.state = {
-      services: null
+     services: null
     };
   }
   // 
-  componentDidMount(){
-       this.setState({
-      services: this.props.services
-
-    })
-    // setInterval(()=>{
-    //   this.props.dispatch(getStaff());
-    //   this.props.dispatch(getServices());
-    //   this.setState({
-    //   services: this.props.services
-
-    // })
-    // },1000)
+  componentWillMount(){
+      this.setState({
+        services: this.props.services
+      })
   }  
-  servicePress = () =>{
-
-  }
 
   render() {
 
+
   	const { width,height } = Dimensions.get('window');
-    
-    console.warn(this.state.services);
-    //console.warn(this.props.services);
+    console.warn(this.props.services);
     return(
       		
 
@@ -88,8 +74,7 @@ class Services extends Component {
 
 var mapStateToProps = (state) => {
   return {
-    services: state.services.services,
-    errorpop: state.services.pop_error,
+    services: state.customer.services,
   }
 }
 

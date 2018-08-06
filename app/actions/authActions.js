@@ -1,7 +1,7 @@
 import {SIGNIN_URL,SIGNUP_URL,CUSTOMER_SIGNIN_URL,CUSTOMER_SIGNUP_URL} from '../api';
 import axios from 'axios';
 import {CancelToken} from 'axios';
-import {addAlert} from './alertsActions';
+
 
 
 
@@ -20,14 +20,23 @@ export const loginStaffUser = (username,password) =>{
 
 export const signInCustomerUser = (username,password)=>{
 	return function(dispatch){
+		console.warn("It started and will execute");
 		return axios.post(CUSTOMER_SIGNIN_URL,{username,password}).then((response)=>{
-			var {userid,username} = response.data;
+	
+			console.warn("It requested and succeed");
+			var {userid,username,error} = response.data;
+			
 			dispatch(customerAuthUser(userid,username));
+			
+			console.warn("It ended and executed");
 		}).catch((error)=>{
+			console.warn("It got caught");
+
 			try{
 				//console.warn(error.response.status);
-				if(error.response.status===422){
-					console.warn("Login Failed");
+				if(error.response.status===401){
+					dispatch(customerLoginFailed(true));
+					console.warn("It dispatched it");
 				}
 			}
 			catch(error){
@@ -74,7 +83,16 @@ export const loginCustomerUser = (username,password)=>{
 	}
 }
 
+export const customerNavigate=(isAlreadyNavigated)=>({
+	type: "IS_ALREADY_NAVIGATED",
+	isAlreadyNavigated,
+})
 
+export const customerLoginFailed = (customerFailed) =>({
+	type: "CUSTOMER_LOGIN_FAILED",
+	customerFailed
+
+})
 const customerAuthUser = (userid,username) => ({
 	type: 'AUTH_CUSTOMER',
 	userid,

@@ -8,12 +8,13 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {saveCustomerInfo} from '../actions/saveCustomerInfoActions';
+import {updateCustomerInfo} from '../actions/customerActions';
 
 import {
 	Text,
 	Dimensions,
-	ScrollView
+	ScrollView,
+  Alert
 } from 'react-native';
 
 class FillUpForm extends Component {
@@ -63,12 +64,32 @@ class FillUpForm extends Component {
       city: text,
      })
   };
-  handleSubmit = () =>{
+  handleSubmit = (serviceid,servicename,staffid,staffname) =>{
+    let servicetype="home";
+    let firstname = this.state.firstname;
+    let lastname = this.state.lastname;
+    let contact = this.state.contact;
+    let street = this.state.street;
+    let brgy = this.state.brgy;
+    let city = this.state.city;
     let userid = this.props.userid;
-    this.props.dispatch(saveCustomerInfo(userid,firstname,lastname,contact,street,brgy,city));
+    if(firstname && lastname && contact && street && brgy && city){
+    this.props.dispatch(updateCustomerInfo(userid,serviceid,servicename,servicetype,staffid,staffname,firstname,lastname,contact,street,brgy,city));
+    }
+    else{
+        Alert.alert(
+        'Ah We really need this information.',
+        'So we can provide you the greatest service',
+        [
+          {text: 'Okay'}
+        ],
+        {cancelable: false}
+        );
+    }
   }
   render() {
   	const {width,height} = Dimensions.get('window');
+    const { serviceid,servicename,staffid,staffname } = this.props.navigation.state.params;
 
     return (
 
@@ -100,10 +121,10 @@ class FillUpForm extends Component {
       		<Input onChangeText={this.handleCity} width={width - 10} alignItems="center" justifyContent="center" color="teal" height={50} borderRadius={8} borderBottomWidth={1} textAlign="center" placeholder="e.g. Tobaco" />
       	</Card>
       	<Card alignItems="center" justifyContent="center">
-      	<Button onPress={this.handleSubmit} width={width-100} height={40} backgroundColor="#246C34" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
+      	<Button onPress={()=>this.handleSubmit(serviceid,servicename,staffid,staffname)} width={width-100} height={40} backgroundColor="#246C34" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
       		<Text style={[styles.header,{color: '#FFFFFF'}]}>Submit</Text>
       	</Button>
-      	<Button  width={width-100} height={40} backgroundColor="gray" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
+      	<Button onPress={()=> null} width={width-100} height={40} backgroundColor="gray" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
       		<Text style={[styles.header,{color: '#FFFFFF'}]}>Clear</Text>
       	</Button>
       	</Card>
@@ -118,7 +139,7 @@ class FillUpForm extends Component {
 
 var mapStateToProps = (state) =>{
   return{
-      userid: state.customer.customerId,
+      userid: state.customer.userid,
       username: state.customer.customerUsernameNotOnline,
   }
 }

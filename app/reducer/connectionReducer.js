@@ -1,18 +1,29 @@
 var defaultState = {
-	connectionType: null,
-	ipAddress: null
+	connectionType: undefined,
+	ipAddress: undefined,
+	isConnected: undefined,
+	isDisplayable: undefined,
+	isServer:undefined,
+	isDisplayable:undefined
+
 }
 module.exports = (state=defaultState,action)=>{
 	switch(action.type){
-		case "CONNECTION_TYPE_CHANGE":
+		case "IS_CONNECTED":
 			return {
-				connectionType: action.connectionType,
+				isConnected: action.isConnectedYet,
+				isDisplayable: action.isDisplayable,
+			}
+		case "IS_SERVER":
+			return{
+				isServer: action.isServer,
+				isDisplayable: action.isServerDisplayable,
 			}
 		case "IP_ADDRESS":
 			return {
 				ipAddress: action.ipAddress,
 			}
-		default
+		default:
 			return state
 	}
 }

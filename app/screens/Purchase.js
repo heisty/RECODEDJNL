@@ -9,7 +9,9 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {availServices,availServiceDelete,alreadyHaveService} from '../actions/availActions';
+import {availService,removeAvailSuccess} from '../actions/customerActions';
+import FlashMessage from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 //import {staff} from '../inappData/staff';
 
 import {
@@ -22,24 +24,36 @@ import {
 import {getStaff} from '../actions/populateActions';
 
 class Purchase extends Component {
+  componentWillMount(){
+
+    this.setState({
+      staff: this.props.staff,
+    })
+  
+  }
   constructor(props) {
     super(props);
   
     this.state = {
       selectedPersona: null,
       staffid: null,
+      staff: null,
+      
     };
   }
 
-  handleAvail=(serviceId,title)=>{
+  handleAvail=(serviceId,servicename,servicetype,staffname)=>{
 
-    this.props.dispatch(alreadyHaveService(this.props.userid));
-    let canAvail = this.props.canAvail;
-    if(canAvail)
+    // this.props.dispatch(alreadyHaveService(this.props.userid));
+    // let canAvail = this.props.canAvail;
+    // console.warn("THIS",canAvail);
+    // if(canAvail)
+    // {
+  if(!this.props.availsuccess)
     {
-    let servicetype="home";
-    this.props.dispatch(availServices(this.props.userid,serviceId,servicetype,this.state.staffid,title));
+      this.props.dispatch(availService(this.props.userid,serviceId,servicename,servicetype,this.state.staffid,staffname));
     }
+
     else{
        Alert.alert(
         'A service is active',
@@ -51,32 +65,51 @@ class Purchase extends Component {
         );
     }
   }
+
+  handleAvailHome = () =>{
+
+  }
   
   componentDidMount(){
-     this.props.dispatch(getStaff());
+       this.setState({
+        staff: this.props.staff,
+     })
+  }
+
+  showAlert = (message,description,type) =>{
+    showMessage({
+      message: message,
+      description: description,
+      type: type,
+    })
   }
   // render FlatList
 
   render() {
     //OUR FAILSAFE MUST BE ADDED OUT Set return iS AUTO 1
-
-    var { staff,userid,availState } = this.props;
+    var { staff,userid,availsuccess,message,isDisplay } = this.props;
   	var { service } = this.props.navigation.state.params;
     var { navigate } = this.props.navigation;
   	const { width,height } = Dimensions.get('window');
+    console.warn(availsuccess,isDisplay);
+    if(availsuccess && isDisplay){
+      //this.showAlert("Service Booked",message,"success");
 
-    if(availState===1){
       Alert.alert(
         'Service Booked!',
-        'Okay, thats great. Your service is underway.',
+        'Thank you for availing this service.',
         [
           {text: 'Okay'}
         ],
         {cancelable: false}
         );
 
-      this.props.dispatch(availServiceDelete());
     }
+    this.props.dispatch(removeAvailSuccess(availsuccess,false));
+
+    //removed effects
+    
+
     return (
     <ScrollView style={{backgroundColor:"#FFFFFF"}}>
       <Container>
@@ -101,7 +134,7 @@ class Purchase extends Component {
       {/*FLAT LIST OF STAFF*/}
       
         <FlatList 
-          data={staff}
+          data={this.state.staff}
           horizontal={true}
           renderItem={({item})=> {
             var username = item.username;
@@ -138,18 +171,19 @@ class Purchase extends Component {
           </Button>
         </Card>
       	<Card marginTop={10} alignItems="center" justifyContent="center">
-      		<Button onPress={()=>this.handleAvail(service._id,service.title)} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
+      		<Button onPress={()=>this.handleAvail(service._id,service.title,"salon",this.state.selectedPersona)} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
       			<Text>Avail</Text>
       		</Button>
       	</Card>
       	<Card marginTop={10} alignItems="center" justifyContent="center">
-      		<Button onPress={()=> navigate('FillUpForm')} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
+      		<Button onPress={()=> navigate('FillUpForm',{"serviceid":service._id,"servicename":service.title,"staffid":this.state.staffid,"staffname":this.state.selectedPersona})} alignItems="center" justifyContent="center" borderRadius={8} borderWidth={1} borderColor="teal" backgroundColor="rgba(255,255,255,0)" width={width-50} height={50}>
       			<Text>Avail for Home Service</Text>
       		</Button>
       	</Card>
          
-
+        <FlashMessage duration={5000} ref="myLocalFlashMessageHome" position='top' />
       </Container>
+
       </ScrollView>
     );
   }
@@ -157,11 +191,11 @@ class Purchase extends Component {
 
 var mapStateToProps = (state) =>{
   return{
-    staff: state.services.staff,
-    services: state.services.services,
-    userid: state.customer.customerId,
-    availState: state.alerts.availState,
-    canAvail: state.alerts.canAvail
+    staff: state.customer.staff,
+    userid: state.customer.userid,
+    availsuccess: state.alert.availsuccess,
+    message: state.alert.message,
+    isDisplay: state.alert.isDisplay,
   }
 }
 

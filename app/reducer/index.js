@@ -1,11 +1,11 @@
 import {combineReducers} from 'redux';
-import authReducer from './authReducer';
-import alertsReducer from './alertsReducers';
-import servicesReducer from './populateServices';
-import customerAuthReducer from './customerAuthReducer';
+import staffReducer from './staffReducer';
+import customerReducer from './customerReducer';
+import alertReducer from './alertReducer';
+import connectionReducer from './connectionReducer';
 module.exports = combineReducers({
-	staff: authReducer,
-	customer: customerAuthReducer,
-	alerts: alertsReducer,
-	services:servicesReducer,
+	staff: staffReducer,
+	customer: customerReducer,
+	alert: alertReducer,
+	connection: connectionReducer,
 });
