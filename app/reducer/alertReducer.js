@@ -17,6 +17,28 @@ module.exports = (state=defaultState,action)=>{
 			message: action.message,
 			isDisplay: action.isDisplay,
 		}
+	case "CANNOT_CONNECT":
+	 	return{
+	 		...state,
+	 		connection: action.connection,
+	 		connDisplay: action.connDisplay,
+	 	}
+	case "SERVER_CONNECTED":
+		return{
+			...state,
+			serverconnection: action.serverconnection,
+			offlineDisplay: action.offlineDisplay,
+		}
+	case "RELOGIN":
+		return{
+			relogin: action.relogin,
+		}
+	case "AUTO_SIGNUP":
+		return{
+			...state,
+			sign: action.sign,
+			signDisplay: action.signDisplay,
+		}
 	default:
 		return state
 	}

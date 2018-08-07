@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {CancelToken} from 'axios';
 let testSite = "https://www.google.com";
-let testServer = "http://192.168.30.2";
+let testServer = "http://192.168.30.3:3000/v1/services";
 export const testConnection = () =>{
 	return function(dispatch){
 		let source = CancelToken.source();
@@ -55,19 +55,19 @@ export const testServerConnection=()=>{
 		setTimeout(()=> {
 			source.cancel();
 			},1000);
-		return await axios.get(testServer,{cancelToken: source.token}).then((response)=>{
+		return axios.post(testServer,{},{cancelToken: source.token}).then((response)=>{
 			dispatch({
-				type: "IS_SERVER",
-				isServer: true,
-				isDisplayable: true
+				type: "SERVER_CONNECTED",
+				serverconnection: true,
+				offlineDisplay: true
 			});
 		}).catch((error)=>{
 			console.warn("ERROR SERVER",error);
 			dispatch({
-				type: "IS_SERVER",
-				isServer: false,
-				isDisplayable: true
-			})
+				type: "SERVER_CONNECTED",
+				serverconnection: false,
+				offlineDisplay: true
+			});
 		});
 	console.warn("ENDED SERVER TESTING");
 	}

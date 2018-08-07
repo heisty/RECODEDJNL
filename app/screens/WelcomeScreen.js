@@ -20,7 +20,7 @@ import {
 import Main from './Main';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage} from 'react-native-flash-message';
-import {custIn,removeLoginFailed} from '../actions/customerActions';
+import {custIn,removeLoginFailed,removeCannotConnect,offlineLogin} from '../actions/customerActions';
 
 // All Packages and Dependencies
 
@@ -127,7 +127,8 @@ class WelcomeScreen extends React.Component{
 
 	render(){
 
-			let { dispatch,userid,loginfailed,message,isConnected,isDisplayable } = this.props;
+			let { username,offline,
+				connection,connDisplay,dispatch,userid,loginfailed,message,isConnected,isDisplayable } = this.props;
 			let { navigate } = this.props.navigation;
 			let { isServer,isServerDisplayable } = this.state;
 // A TRICK TO AVOID CLOSING THE MODALS INSIDE>>>> I WILL FIX THIS SOON
@@ -139,6 +140,7 @@ class WelcomeScreen extends React.Component{
 				ret: false
 			})
 		    }
+
 
 
 // THESE ARE CHECKERS OF CONNECTION
@@ -159,12 +161,24 @@ class WelcomeScreen extends React.Component{
 		}
 
 		
-
+		if(!connection && connDisplay){
+			//this.showAlert("NO SERVER CONNECTION WHATSOEVER.","FRET NOT!. We will let you in and update you once connected.","danger");
+			dispatch(offlineLogin(this.state.username,this.state.password,true));
+		}
 
 		if(loginfailed){
 			this.showAlert("It seems you put a wrong password?",message,"danger");
 		}
-		dispatch(removeLoginFailed());
+		
+		dispatch(removeCannotConnect(connection));
+
+		if(offline && this.state.ret){
+			navigate('Home');
+			console.warn("Fuck HOme");
+			this.setState({
+				ret: false
+			})
+		}
 
 
 // RETURN FUNCTION IS WHAT CAN BE SEEN
@@ -202,12 +216,17 @@ var mapStateToProps = (state) =>{
 	return {
 
 		userid: state.customer.userid,
+		username: state.customer.username,
+		offline: state.customer.offline,
 		loginfailed: state.alert.loginfailed,
 		message: state.alert.message,
 		isConnected: state.connection.isConnected,
 		isServer: state.connection.isServer,
 		isServerDisplayable: state.connection.isServerDisplayable,
 		isDisplayable: state.connection.isDisplayable,
+		connection: state.alert.connection,
+		connDisplay: state.alert.connDisplay,
+
 		
 	}
 }

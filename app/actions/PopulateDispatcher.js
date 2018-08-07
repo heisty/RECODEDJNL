@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {POP_SERVICES,POP_STAFF} from '../api';
+import {POP_SERVICES,POP_STAFF,POP_CUST,POP_REC} from '../api';
 
 
 
@@ -41,6 +41,21 @@ export const populateStaff = () =>{
 	}
 }
 
+export const populateCustomer = () =>{
+	return async function(dispatch){
+		return axios.post(POP_CUST).then((response)=>{
+			var customer = response.data.customer;
+			dispatch({
+				type: "POP_CUSTOMER",
+				customer
+			});
+			console.warn("POP_CUST SUCCEED",customer);
+		}).catch((error)=>{
+			console.warn("popcust",error);
+		});
+	}
+}
+
 export const populateCustomerServices = (userid) =>{
 	return async function(dispatch){
 		// NEED TO GET THE USER SERVICES HE IS WHETHER ACTIVE OR NOT
@@ -50,5 +65,21 @@ export const populateCustomerServices = (userid) =>{
 		}).catch((error)=>{
 			console.warn("")
 		});
+	}
+}
+
+export const getRecords = () =>{
+	return async function(dispatch){
+		return axios.post(POP_REC).then((response)=>{
+			let records = response.data.records;
+
+			dispatch({
+				type: "GET_RECORDS",
+				records
+			})
+			console.warn("REC RET SUC");
+		}).catch((error)=>{
+			console.warn("REC RET FAI",error,error.response);
+		})
 	}
 }

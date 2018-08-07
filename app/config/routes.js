@@ -11,18 +11,23 @@ import Feedback from '../screens/Feedback';
 import Purchase from '../screens/Purchase';
 import FillUpForm from '../screens/FillUpForm';
 import {connect} from 'react-redux';
+import AdminHome from '../screens/AdminHome';
+import AdminSalon from '../screens/AdminSalon';
+import {populateDispatcher,populateStaff} from '../actions/PopulateDispatcher';
 import {
 	Image,
 	Dimensions
 } from 'react-native';
 
 const bottomNavigation = createMaterialBottomTabNavigator({
+
 	Home: {
 		screen: Home,
 		navigationOptions: {
 			tabBarLabel: 'Home',
 			tabBarColor: 'green',
 			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/home.png')}/>
+			
 		}
 	},
 	Services: {
@@ -57,6 +62,37 @@ const bottomNavigation = createMaterialBottomTabNavigator({
   barStyle: { backgroundColor: 'gray',width: Dimensions.get('window').width,height: Dimensions.get('window').width/5,alignItems: 'center',justifyContent:'center',padding: 28 }
 });
 
+// for staff
+
+const bottomAdminNavigation = createMaterialBottomTabNavigator({
+
+	AdminHome: {
+		screen: AdminHome,
+		navigationOptions: {
+			tabBarLabel: 'Home',
+			tabBarColor: 'green',
+			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/home.png')}/>
+
+		}
+	},
+	AdminSalon: {
+		screen: AdminSalon,
+		navigationOptions: {
+			tabBarLabel: 'Salon',
+			tabBarColor: 'teal',
+			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/salon.png')}/>
+		}
+	}
+
+},{
+	initialRouteName: 'AdminHome',
+	shifting: true,
+	activeTintColor: '#FFFFFF',
+	inactiveTintColor: '#FFFFFF',
+	barStyle: { backgroundColor: 'gray',width: Dimensions.get('window').width,height: Dimensions.get('window').width/5,alignItems: 'center',justifyContent:'center',padding: 28 }
+
+})
+
 const componentNavigation = createStackNavigator({
 	Login: 
 	{
@@ -89,6 +125,12 @@ const MainNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	},
+	bottomAdminNavigation: {
+		screen: bottomAdminNavigation,
+		navigationOptions: {
+			header: ()=> null
+		}
+	},
 	Modal: {
 		screen: Purchase,
 		navigationOptions: {
@@ -102,5 +144,6 @@ const MainNavigation = createStackNavigator({
 		}
 	}
 },{initialRouteName: 'componentNavigation'})
+
 
 module.exports = MainNavigation;

@@ -49,7 +49,7 @@ class Services extends Component {
       	{/**/}
       		{/*RENDER SERVICES*/}
       		<FlatList
-      			data={this.state.services}
+      			data={this.props.services}
       			renderItem={({item})=> {
       				return(
                 <Card  alignItems="center" justifyContent="center">

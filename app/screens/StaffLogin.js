@@ -39,7 +39,8 @@ class StaffLogin extends Component {
 
   	};
   	onSignIn = () =>{
-      this.props.dispatch(loginUser(this.state.username,this.state.password));
+      this.props.navigation.navigate("AdminHome");
+      //this.props.dispatch(loginUser(this.state.username,this.state.password));
 
     }
   	handleUsernameTextChange=(text)=>{
@@ -82,9 +83,7 @@ class StaffLogin extends Component {
 
 var mapStateToProps = (state) =>{
   return{
-    userid: state.staff.userid,
-    text: state.alerts.alert,
-    canbe: state.alerts.canbe,
+    
   }
 }
 

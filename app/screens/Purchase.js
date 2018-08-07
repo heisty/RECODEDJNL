@@ -134,7 +134,7 @@ class Purchase extends Component {
       {/*FLAT LIST OF STAFF*/}
       
         <FlatList 
-          data={this.state.staff}
+          data={this.props.staff}
           horizontal={true}
           renderItem={({item})=> {
             var username = item.username;
