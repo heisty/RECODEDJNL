@@ -18,7 +18,8 @@ import {
   removeSign,
   removeOfflineDisplay,
   offlineLogin,
-  customerActive
+  customerActive,
+  offlineLoginReset
 } from '../actions/customerActions';
 import {testServerConnection} from '../actions/connectionActions';
 import {custIn} from '../actions/customerActions';

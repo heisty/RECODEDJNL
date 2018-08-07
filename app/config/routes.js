@@ -16,7 +16,9 @@ import AdminSalon from '../screens/AdminSalon';
 import {populateDispatcher,populateStaff} from '../actions/PopulateDispatcher';
 import {
 	Image,
-	Dimensions
+	Dimensions,
+	Text,
+	View
 } from 'react-native';
 
 const bottomNavigation = createMaterialBottomTabNavigator({
@@ -116,13 +118,38 @@ const MainNavigation = createStackNavigator({
 	componentNavigation: {
 		screen: componentNavigation,
 		navigationOptions: {
-			header: ()=> null
+			header: ()=>  {
+				return(
+						
+					<View style={{width: Dimensions.get('window').width
+						, height:60, backgroundColor:'#FFFFFF',
+						alignItems: 'center',justifyContent: 'center',borderBottomWidth: 1,borderBottomColor: 'gray'}}>
+						<Text style={{color: 'darkgreen',fontSize: 30,fontFamily: 'Oswald-Light'}}>
+							JNL SALON
+						</Text>
+					</View>
+
+					);
+			}
 		}
 	},
 	bottomNavigation: {
 		screen: bottomNavigation,
 		navigationOptions: {
-			header: ()=> null
+			header: ()=>  {
+				return(
+						
+					<View style={{width: Dimensions.get('window').width
+						, height:60, backgroundColor:'#FFFFFF',
+						alignItems: 'center',justifyContent: 'center',borderBottomWidth: 1,borderBottomColor: 'gray'}}>
+						<Text style={{color: 'darkgreen',fontSize: 30,fontFamily: 'Oswald-Light'}}>
+							JNL SALON
+						</Text>
+					</View>
+
+
+					);
+			}
 		}
 	},
 	bottomAdminNavigation: {
@@ -143,7 +170,9 @@ const MainNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	}
-},{initialRouteName: 'componentNavigation'})
+},{initialRouteName: 'componentNavigation',navigationOptions: {
+	
+}})
 
 
 module.exports = MainNavigation;
