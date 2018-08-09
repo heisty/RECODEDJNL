@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from 'react-navigation';
+import {createStackNavigator,StackActions,NavigationActions} from 'react-navigation';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import Header from '../components/Header';
@@ -13,6 +13,8 @@ import FillUpForm from '../screens/FillUpForm';
 import {connect} from 'react-redux';
 import AdminHome from '../screens/AdminHome';
 import AdminSalon from '../screens/AdminSalon';
+import StaffHome from '../screens/StaffHome';
+import StaffProfile from '../screens/StaffProfile';
 import {populateDispatcher,populateStaff} from '../actions/PopulateDispatcher';
 import {
 	Image,
@@ -20,6 +22,9 @@ import {
 	Text,
 	View
 } from 'react-native';
+
+
+
 
 const bottomNavigation = createMaterialBottomTabNavigator({
 
@@ -58,14 +63,42 @@ const bottomNavigation = createMaterialBottomTabNavigator({
 	}
 },{
   initialRouteName: 'Home',
-  shifting: true,
+  shifting: false,
   activeTintColor: '#FFFFFF',
-  inactiveTintColor: '#FFFFFF',
-  barStyle: { backgroundColor: 'gray',width: Dimensions.get('window').width,height: Dimensions.get('window').width/5,alignItems: 'center',justifyContent:'center',padding: 28 }
+  inactiveTintColor: '#000000',
+  barStyle: { borderRadius: 8,width:Dimensions.get('window').width-50,marginBottom: 10,justifyContent:'center',alignSelf: 'center',backgroundColor: 'green' }
 });
 
 // for staff
 
+const bottomStaffNavigation = createMaterialBottomTabNavigator({
+
+	StaffHome: {
+		screen: StaffHome,
+		navigationOptions: {
+			tabBarLabel: 'Home',
+			tabBarColor: 'green',
+			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/home.png')}/>
+
+		}
+	},
+	Profile: {
+		screen: StaffProfile,
+		navigationOptions: {
+			tabBarLabel: 'Profile',
+			tabBarColor: 'green',
+			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/profile.png')}/>
+
+		}
+	}
+
+},{
+  initialRouteName: 'StaffHome',
+  shifting: false,
+  activeTintColor: '#FFFFFF',
+  inactiveTintColor: '#000000',
+  barStyle: { borderRadius: 8,width:Dimensions.get('window').width-50,marginBottom: 10,justifyContent:'center',alignSelf: 'center',backgroundColor: 'green' }
+})
 const bottomAdminNavigation = createMaterialBottomTabNavigator({
 
 	AdminHome: {
@@ -87,11 +120,12 @@ const bottomAdminNavigation = createMaterialBottomTabNavigator({
 	}
 
 },{
-	initialRouteName: 'AdminHome',
-	shifting: true,
-	activeTintColor: '#FFFFFF',
-	inactiveTintColor: '#FFFFFF',
-	barStyle: { backgroundColor: 'gray',width: Dimensions.get('window').width,height: Dimensions.get('window').width/5,alignItems: 'center',justifyContent:'center',padding: 28 }
+  initialRouteName: 'AdminHome',
+  shifting: false,
+  activeTintColor: '#FFFFFF',
+  inactiveTintColor: '#000000',
+  barStyle: { borderRadius: 8,width:Dimensions.get('window').width-50,marginBottom: 10,justifyContent:'center',alignSelf: 'center',backgroundColor: 'green' }
+
 
 })
 
@@ -110,7 +144,7 @@ const componentNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	}
-});
+},{initialRouteName: 'Login'});
 
 
 
@@ -154,6 +188,12 @@ const MainNavigation = createStackNavigator({
 	},
 	bottomAdminNavigation: {
 		screen: bottomAdminNavigation,
+		navigationOptions: {
+			header: ()=> null
+		}
+	},
+	bottomStaffNavigation: {
+		screen: bottomStaffNavigation,
 		navigationOptions: {
 			header: ()=> null
 		}

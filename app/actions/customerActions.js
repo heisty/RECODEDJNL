@@ -6,7 +6,8 @@ import {
 	AVAIL_SERVICE,
 	UPDATE_CUSTOMER_INFO,
 	COUNT_ACTIVE,
-	POSITION_ACTIVE
+	POSITION_ACTIVE,
+	ACTIVE_SERVICES
 } from '../api';
 
 export const custIn=(username,password)=>{
@@ -14,7 +15,7 @@ export const custIn=(username,password)=>{
 		let source = CancelToken.source();
 		setTimeout(()=> {
 			source.cancel();
-			},1000);
+			},3000);
 		return await axios.post(CUST_IN,{username,password},{cancelToken: source.token}).then((response)=>{
 			let { userid,username } = response.data;
 			dispatch({
@@ -25,6 +26,10 @@ export const custIn=(username,password)=>{
 				offline: false,
 				displayOffline: true,
 			});
+			dispatch({
+				type: "SERVER_CONNECTED",
+				offlineDisplay: false,
+			})
 		}).catch((error)=>{
 			try{
 			let message = "Sorry but for some reason, Cannot let you in.";
@@ -36,7 +41,9 @@ export const custIn=(username,password)=>{
 				dispatch({
 					type: "RELOGIN",
 					relogin: true,
+					message: "Sorry but wrong password. Or the username is already taken."
 				});
+				dispatch(offlineLogin(null,null));
 				console.warn("Wrong Password");
 				message = "Sorry, your password is incorrect."
 			}
@@ -47,18 +54,29 @@ export const custIn=(username,password)=>{
 				message
 			});
 
+			dispatch({
+				type: "SERVER_CONNECTED",
+				offlineDisplay: true,
+			})
+
 			console.warn("CUSTIN",error.response.status);
 		}
 		catch(error){
+
 			dispatch({
-				type: "CANNOT_CONNECT",
-				connection:false,
-				connDisplay: true
-			})
+				type: "LOGGED_USER",
+				userid: null,
+				username,
+				password,
+				offline: true,
+				displayOffline: true,
+			});
+
+			
 			console.warn("SERVER NO CONN");
 		}
 	
-			console.warn(error);
+			console.warn("CUSTIN CTACH OUTER","ERROR",error.reponse.data.error,"TIMEOUT",error.response.timeout);
 
 		});
 	}
@@ -69,7 +87,7 @@ export const custUp=(username,password)=>{
 		let source = CancelToken.source();
 		setTimeout(()=> {
 			source.cancel();
-			},1000);
+			},3000);
 		return await axios.post(CUST_UP,{username,password},{cancelToken: source.token}).then((response)=>{
 			let { userid,username } = response.data;
 			dispatch({
@@ -83,7 +101,12 @@ export const custUp=(username,password)=>{
 			dispatch({
 					type: "AUTO_SIGNUP",
 					sign: true,
+					signDisplay:true
 				});
+			dispatch({
+				type: "SERVER_CONNECTED",
+				offlineDisplay: false,
+			})
 		}).catch((error)=>{
 			try{
 			console.warn("CUSTUP",error.response.status);
@@ -94,6 +117,18 @@ export const custUp=(username,password)=>{
 				type: "CANNOT_CONNECT",
 				connection:false,
 				connDisplay: true,
+			});
+				dispatch({
+				type: "LOGGED_USER",
+				userid: null,
+				username,
+				password,
+				offline: true,
+				displayOffline: true,
+			});
+				dispatch({
+				type: "SERVER_CONNECTED",
+				offlineDisplay: true,
 			})
 				console.warn("SERVER NO CONN")
 			}
@@ -212,6 +247,22 @@ export const customerActive=()=>{
 }
 
 
+export const returnActive = (userid) =>{
+	return function(dispatch){
+		return axios.post(ACTIVE_SERVICES,{userid}).then((response)=>{
+				let services = response.data.services;
+				dispatch({
+					type: "CUST_ACTIVE_SERVICE",
+					services
+				});
+			console.warn("RA",services);
+		}).catch((error)=>{
+			console.warn("RA",error);
+		})
+	}
+}
+
+
 
 
 
@@ -250,6 +301,12 @@ export const offlineLoginReset = () =>({
 	offline: null,
 	displayOffline: null,
 });
+
+export const reloginSet = () =>({
+	type: "RELOGIN",
+	relogin: false,
+	message: null,
+})
 
 
 export const removeSign=(sign)=>({

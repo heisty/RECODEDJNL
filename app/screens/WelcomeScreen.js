@@ -20,7 +20,14 @@ import {
 import Main from './Main';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage} from 'react-native-flash-message';
-import {custIn,removeLoginFailed,removeCannotConnect,offlineLogin} from '../actions/customerActions';
+import {
+	custIn,
+	removeLoginFailed,
+	removeCannotConnect,
+	offlineLogin,
+	reloginSet
+} from '../actions/customerActions';
+import {StackActions,NavigationActions} from 'react-navigation';
 
 // All Packages and Dependencies
 
@@ -35,20 +42,9 @@ class WelcomeScreen extends React.Component{
 
 	}
 // I WANT TO PUT THE MAIN COMPONENTS TO LOAD HERE.... WILLMOUNT
-	componentWillMount(){
-		
-		// I DISPATCHED THIS TO PING GOOGLE OK.
 
-		this.props.dispatch(testConnection());
-		// this.setState({
-		// 	isServer: this.props.isServer,
-		// 	isServerDisplayable: this.props.isServerDisplayable,
-		// });
-		
 
-		
-		
-	}
+
 
 
 
@@ -64,9 +60,8 @@ class WelcomeScreen extends React.Component{
 	  	password: null,
 	  	usernamePlaceholder: 'What is your username?',
 	  	passwordPlaceholder: 'Secret Password',
-	  	ret: true,
-	  	isServer:null,
-	  	isServerDisplayable:null
+	  	isSubmit: false,
+	  	
 
 	  	
 	  	
@@ -107,6 +102,7 @@ class WelcomeScreen extends React.Component{
 		else{
 
 		this.props.dispatch(custIn(this.state.username,this.state.password));
+		this.setState({isSubmit: true})
 		
 		}
 
@@ -114,72 +110,75 @@ class WelcomeScreen extends React.Component{
 
 // THIS IS THE SHOWALERT IMPLEMENTATION OF FLASH MESSAGE LIBS
 
-	showAlert = (message,description,type) =>{
-		showMessage({
-			message: message,
-			description: description,
-			type: type,
-		})
+	navigateStack = (route) =>{
+		const resetActions = StackActions.reset({
+				index:0,
+				key: null,
+				actions: [
+						NavigationActions.navigate({
+						routeName: route,
+					}),
+				]
+			});
+			this.props.navigation.dispatch(resetActions);
 	}
+
 
 
 // RENDER FUNCTION WHERE EVERYTHING STARTS
 
 	render(){
 
-			let { username,offline,
-				connection,connDisplay,dispatch,userid,loginfailed,message,isConnected,isDisplayable } = this.props;
-			let { navigate } = this.props.navigation;
-			let { isServer,isServerDisplayable } = this.state;
-// A TRICK TO AVOID CLOSING THE MODALS INSIDE>>>> I WILL FIX THIS SOON
+		const {
+			userid,
+			offline,
+			relogin,
+			message,
+		} = this.props;
 
-		if(userid && this.state.ret){
-			navigate('Home');
-			console.warn("Fuck HOme");
-			this.setState({
-				ret: false
-			})
-		    }
+		const {
+			navigate
+		} = this.props.navigation;
 
 
+		if(userid){
+			console.warn("IS_LOGGED_IN");
+			this.navigateStack("bottomNavigation");
+			
 
-// THESE ARE CHECKERS OF CONNECTION
-		//console.warn(isServer,isServerDisplayable);
-		if(1==2/*isServer && isServerDisplayable*/){
-		this.showAlert("Oh Great, You are connected to our server","You can use our application full feature because of that.","success");
+				
 		}
-		else
-		{
-		if(isConnected && isDisplayable){
-			this.showAlert("Oh Great, You have internet.","You can use our application full feature because of that.","success");
-			dispatch(isConnectedChange(true,false));
-		}
-		if(!isConnected && isDisplayable){
-			this.showAlert("Oh Bad, You have no internet.","You can still use our application but is kind of limited.","warning");
-			dispatch(isConnectedChange(false,false));
-		}
-		}
+		if(offline && offline!==undefined && this.state.isSubmit){
+			console.warn("Offline",offline);
+			Alert.alert(
+        	'OFFLINE LOGIN',
+        	"Once connected we will check your account and update you.",
+        	[
+        	  {text: 'Okay'}
+       		 ],
+        	{cancelable: false}
+        	);
+			this.setState({isSubmit: true})
+        	this.props.dispatch(offlineLogin(this.state.username,this.state.password));
+        	this.navigateStack("bottomNavigation");
+        	
 
-		
-		if(!connection && connDisplay){
-			//this.showAlert("NO SERVER CONNECTION WHATSOEVER.","FRET NOT!. We will let you in and update you once connected.","danger");
-			dispatch(offlineLogin(this.state.username,this.state.password,true));
 		}
 
-		if(loginfailed){
-			this.showAlert("It seems you put a wrong password?",message,"danger");
-		}
-		
-		dispatch(removeCannotConnect(connection));
+		if(relogin && relogin!==undefined){
+			console.warn("Login Failed");
 
-		if(offline && this.state.ret){
-			navigate('Home');
-			console.warn("Fuck HOme");
-			this.setState({
-				ret: false
-			})
-		}
+			Alert.alert(
+        	'LOGIN FAILED',
+        	message,
+        	[
+        	  {text: 'Okay'}
+       		 ],
+        	{cancelable: false}
+        	);
+        	this.props.dispatch(reloginSet());
 
+		}
 
 // RETURN FUNCTION IS WHAT CAN BE SEEN
 
@@ -203,7 +202,6 @@ class WelcomeScreen extends React.Component{
 				</Card>
 				<Card flex={1}>
 				</Card>
-				<FlashMessage duration={5000} ref="myLocalFlashMessage" position='top' />
 			</Container>
 
 			);
@@ -216,18 +214,10 @@ var mapStateToProps = (state) =>{
 	return {
 
 		userid: state.customer.userid,
-		username: state.customer.username,
 		offline: state.customer.offline,
 		loginfailed: state.alert.loginfailed,
+		relogin: state.alert.relogin,	
 		message: state.alert.message,
-		isConnected: state.connection.isConnected,
-		isServer: state.connection.isServer,
-		isServerDisplayable: state.connection.isServerDisplayable,
-		isDisplayable: state.connection.isDisplayable,
-		connection: state.alert.connection,
-		connDisplay: state.alert.connDisplay,
-
-		
 	}
 }
 

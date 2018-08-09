@@ -16,8 +16,9 @@ import {
   Alert
 } from 'react-native';
 
-import {loginStaffUser} from '../actions/authActions';
+import {signInAdmin} from '../actions/staffActions';
 import Home from './Home';
+import {StackActions,NavigationActions} from 'react-navigation';
 
 
 
@@ -39,8 +40,8 @@ class StaffLogin extends Component {
 
   	};
   	onSignIn = () =>{
-      this.props.navigation.navigate("AdminHome");
-      //this.props.dispatch(loginUser(this.state.username,this.state.password));
+      
+      this.props.dispatch(signInAdmin(this.state.username,this.state.password));
 
     }
   	handleUsernameTextChange=(text)=>{
@@ -56,11 +57,36 @@ class StaffLogin extends Component {
   	};
   	//render
   render() {
+    let {isAdmin,staffid} = this.props;
     // if(this.props.userid){
     //  this.props.navigation.navigate('Home');
     // }
 // {this.props.canbe && Alert.alert("We couldn't log you in",'Please check your credentials',[{text: 'Okay'}],{cancelable:false})}
-        
+      console.warn("ADMIN",isAdmin);
+      if(isAdmin){
+        const resetActions = StackActions.reset({
+        index:0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({
+            routeName: "bottomAdminNavigation",
+          }),
+        ]
+      });
+      this.props.navigation.dispatch(resetActions);
+      }
+      if(staffid){
+        const resetActions = StackActions.reset({
+        index:0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({
+            routeName: "bottomStaffNavigation",
+          }),
+        ]
+      });
+      this.props.navigation.dispatch(resetActions);
+      }
     
     return (
      <Container>
@@ -83,7 +109,8 @@ class StaffLogin extends Component {
 
 var mapStateToProps = (state) =>{
   return{
-    
+    isAdmin: state.staff.isAdmin,
+    staffid: state.staff.staffid,
   }
 }
 

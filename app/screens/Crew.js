@@ -39,8 +39,8 @@ class Crew extends Component {
     return (
       <Container>
       	<Card>
-      		<Card alignItems="center" justifyContent="center" width={width} height={50} backgroundColor="teal">
-      			<Text style={[styles.header,{color: '#FFFFFF',fontSize: 20}]}>Our Employees</Text>
+      		<Card alignItems="center" justifyContent="center" width={width} height={50} backgroundColor="white">
+      			<Text style={[styles.header,{fontSize: 14,color: '#000000'}]}>Our Employees</Text>
       		</Card>
           </Card>
           <FlatList 
@@ -48,9 +48,10 @@ class Crew extends Component {
           renderItem={({item})=> {
             return(
               <Button alignItems="center"  justifyContent="space-between">
-                <Card width={width/2} margin={10} height={190} borderRadius={8} backgroundColor="gray">
-                  <Text>{item.name}</Text>
+                <Card width={110} margin={10} height={110} borderRadius={360} backgroundColor="white" borderWidth={1}>
+                  
                 </Card>
+                <Text>{item.name}</Text>
               </Button>
              
 

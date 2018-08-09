@@ -1,14 +1,14 @@
 export const staff = [
 	{
-		name: 'Jean',
+		name: 'Charlot Volante',
 		
 	},
 	{
-		name: 'Jean1',
+		name: 'Agnes Vicente',
 		
 	},
 	{
-		name: 'Jean2',
+		name: 'Welbert Merle',
 		
 	}
 ];

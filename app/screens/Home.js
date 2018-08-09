@@ -11,6 +11,7 @@ import Card from '../components/Card';
 import styles from './styles';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage} from 'react-native-flash-message';
+import {popAction} from '../config/routes';
 import {populateDispatcher,populateStaff} from '../actions/PopulateDispatcher';
 import {
   positionActive,
@@ -19,10 +20,13 @@ import {
   removeOfflineDisplay,
   offlineLogin,
   customerActive,
-  offlineLoginReset
+  offlineLoginReset,
+  returnActive
 } from '../actions/customerActions';
 import {testServerConnection} from '../actions/connectionActions';
+import {deleteAvail} from '../actions/PopulateStaff';
 import {custIn} from '../actions/customerActions';
+import {StackActions,NavigationActions} from 'react-navigation';
 // 
 
 import {
@@ -34,13 +38,15 @@ import {
 } from 'react-native';
 
 class Home extends Component {
-
+  
 // COMPONENT WILL MOUNT
   constructor(props) {
     super(props);
   
     this.state = {
-      counter: 0
+      counter: 0,
+      interval: 3000,
+      availid: null
     };
   }
   componentWillMount(){
@@ -49,14 +55,30 @@ class Home extends Component {
    
   }
   componentDidMount(){
-    setInterval(()=>{
+
+    if(this.props.offlineDisplay){
+
+    }
+
+    this.timer = setInterval(()=>{
     this.props.dispatch(populateDispatcher());
     this.props.dispatch(populateStaff());
     this.props.dispatch(positionActive(this.props.userid));
     this.props.dispatch(testServerConnection());
     this.props.dispatch(customerActive());
+    this.props.dispatch(returnActive(this.props.userid));
+
     },3000)
+
+   
+   
      
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer);
+    this.timer = null;
+    console.warn("UNMOUNTED");
   }
 
   handleTab = () =>{
@@ -72,7 +94,23 @@ class Home extends Component {
     })
  }
 
+
+ navigateStack = (route) =>{
+    const resetActions = StackActions.reset({
+        index:0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({
+            routeName: route,
+          }),
+        ]
+      });
+      this.props.navigation.dispatch(resetActions);
+  }
+
   render(){
+
+    console.warn(this.props.userid);
    
   	const { width,height } = Dimensions.get('window');
     const { 
@@ -86,7 +124,7 @@ class Home extends Component {
       userid,
       username,
       password,
-      activeServices,
+      activeservice,
       position,
       total 
     } = this.props;
@@ -114,12 +152,29 @@ class Home extends Component {
      
      //    }
 
-    if(offlineDisplay){
+    if(offline){
        dispatch(custIn(username,password));
     }
+    console.warn("OFFLINED",offlineDisplay,this.props.password)
 
     if(relogin){
       console.warn("RELOGIN");
+
+      this.navigateStack("componentNavigation");
+        
+    }
+
+
+    if(sign && signDisplay){
+         Alert.alert(
+        'ACCOUNT CREATED!',
+        'We detected that you are a new one so we took the liberty to create account for you.',
+        [
+          {text: 'Okay'}
+        ],
+        {cancelable: false}
+        );
+      this.props.dispatch(removeSign(sign));
     }
 
     let postfix = null;
@@ -142,20 +197,20 @@ class Home extends Component {
       	<Card>
       		{/*Greeting*/}
 
-      			<Card backgroundColor="teal" alignItems="center" justifyContent="center" width={width} height={100}>
-      				<Text style={styles.header}>Good Day!</Text>
-      				<Text style={[styles.header,{fontSize: 20,color: '#FFFFFF'}]}>{username}@{status}</Text>
+      			<Card backgroundColor="white" alignItems="center" flexDirection="row" justifyContent="center" width={width} height={50}>
+      				<Text style={[styles.header,{fontSize: 20,color: 'rgba(0,0,0,0.8)'}]}>Good Day! ,</Text>
+      				<Text style={[styles.header,{fontSize: 20,color: 'rgba(0,0,0,0.8)'}]}>{username}@{status}</Text>
       			</Card>
 
       		{/*End Greet*/}
 
       	{/*Notify customer queue*/}
       			<Card alignItems="center" justifyContent="center">
-      			<Card borderRadius={8} backgroundColor="orange" alignItems="center" justifyContent="center" width={width-30} height={200}>
-      				<Text style={styles.header}>Customer Queue</Text>
-      				{position && position!==0 && <Text style={[styles.header,{color: 'teal',fontSize: 20}]}>You are the {position}{postfix}/{total} customers.</Text>}
-      				{(!position || position===0) && <Text style={[styles.header,{color: 'teal',fontSize: 20}]}>You are not in the customer queue. Please avail a service.</Text>}
-      				{position && <Text style={[styles.header,{color: '#FFFFFF',fontSize: 20}]}>Time Estimate: {this.state.counter} hours</Text>}
+      			<Card borderRadius={5} borderWidth={1} backgroundColor="teal" alignItems="center" justifyContent="center" width={width-30} height={200}>
+      				<Text style={[styles.header,{color: 'white'}]}>Customer Queue</Text>
+      				{position && position!==0 && <Text style={[styles.header,{color: 'white',fontSize: 20}]}>You are the {position}{postfix}/{total} customers.</Text>}
+      				{(!position || position===0) && <Text style={[styles.header,{color: 'white',fontSize: 20}]}>You are not in the customer queue. Please avail a service.</Text>}
+      				{position && <Text style={[styles.header,{color: 'white',fontSize: 20}]}>Time Estimate: {this.state.counter} hours</Text>}
       		
       			</Card>
       			</Card>
@@ -163,12 +218,27 @@ class Home extends Component {
         {/*End Notify*/}
 
         {/* TOP PIC*/}
-        	<Card alignItems="center" justifyContent="center" width={width} height={30} backgroundColor='#246C34'>
-        		<Text style={[styles.header,{fontSize: 15}]}>My Active Services</Text>
+        	<Card marginTop={10} alignItems="center" justifyContent="center" width={width} height={30} backgroundColor='white' borderWidth={1}>
+        		<Text style={[styles.header,{fontSize: 15,color: '#000000'}]}>My Active Services</Text>
         	</Card>
           <FlatList 
-          data={activeServices}
-          renderItem={({item})=><Text>{item.servicename}</Text>}
+          data={activeservice}
+          renderItem={({item})=>{
+            let availid = item._id;
+            return(
+                    <Card marginTop={10} alignItems="center" justifyContent="center">
+                    <Card flexDirection="row" width={width-30} height={60} borderRadius={8} borderWidth={1} alignItems="center" justifyContent="space-between">
+                        <Text style={[styles.header,{color:'#000000',fontSize:18,textAlign:'center'}]}>
+                            {item.servicename}
+                        </Text>
+                        <Button onPress={()=> this.props.dispatch(deleteAvail(availid))} width={80} height={40} borderRadius={6} backgroundColor="red">
+                            <Text style={[styles.header,{color:'#FFFFFF',fontSize:18,textAlign:'center'}]}>Cancel Order</Text>
+                        </Button>
+                    </Card>
+                    </Card>
+
+              );
+          }}
           keyExtractor={(item)=> item._id}
           />
 
@@ -200,7 +270,8 @@ var mapStateToProps = (state) => {
    serverconnection: state.alert.serverconnection,
    offlineDisplay: state.alert.offlineDisplay,
    displayOffline: state.customer.displayOffline,
-   total: state.customer.total
+   total: state.customer.total,
+   activeservice: state.customer.activeservice,
   
     
   }

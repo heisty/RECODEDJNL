@@ -1,4 +1,5 @@
 var API_URL = 'http://192.168.30.3:3000/v1';
+//var API_URL = 'https://boiling-journey-93382.herokuapp.com/v1';
 
 //CUSTOMER
 exports.CUST_IN = `${API_URL}/customersignin`;
@@ -18,6 +19,11 @@ exports.SIGNUP_URL = `${API_URL}/signup`;
 exports.SIGNIN_URL = `${API_URL}/signin`;
 exports.ADD_SERVICE = `${API_URL}/addservices`;
 exports.UPDATE_SERVICE = `${API_URL}/updateservices`;
+exports.GET_APPOINTMENT = `${API_URL}/getappointment`;
+exports.GET_STAFF_TRANSACTION = `${API_URL}/getstafftransaction`;
+exports.GET_STAFF_PROFILE = `${API_URL}/retrievestaffprofile`;
+exports.UPDATE_STAFF_PROFILE = `${API_URL}/updatestaffprofile`;
+exports.LOGIN_ADMIN = `${API_URL}/loginadmin`;
 
 
 //POPS
@@ -31,3 +37,4 @@ exports.POP_REC = `${API_URL}/getrecords`;
 exports.DEL_STAFF = `${API_URL}/deletebyid`;
 exports.DEL_CUST = `${API_URL}/deletebycustomerid`;
 exports.DEL_SERVICE = `${API_URL}/deleteservices`;
+exports.DEL_AVAIL = `${API_URL}/deleteactiveavail`;

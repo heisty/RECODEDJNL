@@ -43,8 +43,8 @@ class Services extends Component {
 
       	{/*TOP HEADER*/}
       		
-      		<Card backgroundColor="teal" alignItems="center" justifyContent="center" width={width} height={50}>
-      			<Text style={[styles.header,{fontSize: 20}]}>Choose your desired service.</Text>
+      		<Card backgroundColor="white" alignItems="center" justifyContent="center" width={width} height={50}>
+      			<Text style={[styles.header,{fontSize: 14,color: '#000000'}]}>Choose your desired service.</Text>
       		</Card>
       	{/**/}
       		{/*RENDER SERVICES*/}

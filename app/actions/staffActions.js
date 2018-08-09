@@ -6,7 +6,9 @@ import {
 	ADD_SERVICE,
 	UPDATE_SERVICE,
 	DEL_SERVICE,
-	DEL_CUST
+	DEL_CUST,
+	SIGNIN_URL,
+	LOGIN_ADMIN
 } from '../api';
 
 export const deleteStaff=(staffid)=>{
@@ -68,3 +70,58 @@ export const deleteByCustomerId = (userid) =>{
 		});
 	}
 }
+
+export const signInAdmin = (username,password) =>{
+	return function(dispatch){
+		return axios.post(LOGIN_ADMIN,{username,password}).then((response)=>{
+			console.warn("logged",response.data);
+			
+			if(!response.data){
+				dispatch(signInStaff(username,password));
+			}
+			else{
+				let {username,_id} = response.data;
+				dispatch({
+					type: "IS_ADMIN",
+					userid: _id,
+					username,
+					isadmin: true
+				});
+				console.warn("Admin");
+			}
+		}).catch((error)=>{
+			if(error.response.status===401){
+				console.warn("401");
+			}
+			if(error.response.status===422){
+				console.warn("422");
+			}
+		});
+	}
+}
+
+export const signInStaff = (username,password) =>{
+	console.warn("RECEIVED--logged");
+	return function(dispatch){
+		return axios.post(SIGNIN_URL,{username,password}).then((response)=>{
+			console.warn("RECEIVED--logged",response.data);
+			let {userid,username} = response.data;
+			
+			dispatch({
+				type: "LOGGED_STAFF",
+				staffid: userid,
+				staffname: username
+			});
+			console.warn(userid);
+		}).catch((error)=>{
+			console.warn(error);
+			if(error.response.status===401){
+				console.warn("401");
+			}
+			if(error.response.status===422){
+				console.warn("422");
+			}
+		});
+	}
+}
+

@@ -1,8 +1,9 @@
 import {staff} from '../inappData/staff';
+import {services} from '../inappData/services';
 let defaultState = {
 	staff: staff,
 	customer: undefined,
-	services: undefined
+	services: services
 }
 module.exports = (state=defaultState,action)=>{
 	switch(action.type){
@@ -15,6 +16,11 @@ module.exports = (state=defaultState,action)=>{
 				offline: action.offline,
 				displayOffline: action.displayOffline,
 			}
+		case "CUST_ACTIVE_SERVICE":
+				return{
+					...state,
+					activeservice: action.services,
+				}
 		case "CUSTOMER_QUEUE":
 			return{
 				...state,

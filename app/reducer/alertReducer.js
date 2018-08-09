@@ -4,12 +4,6 @@ let defaultState = {
 
 module.exports = (state=defaultState,action)=>{
 	switch(action.type){
-	case "LOGIN_FAILED":
-		return{
-			...state,
-			loginfailed: action.loginfailed,
-			message: action.message,
-		}
 	case "AVAIL_SUCCESS":
 		return{
 			...state,
@@ -28,10 +22,12 @@ module.exports = (state=defaultState,action)=>{
 			...state,
 			serverconnection: action.serverconnection,
 			offlineDisplay: action.offlineDisplay,
+			stop: action.stop,
 		}
 	case "RELOGIN":
 		return{
 			relogin: action.relogin,
+			message: action.message,
 		}
 	case "AUTO_SIGNUP":
 		return{
