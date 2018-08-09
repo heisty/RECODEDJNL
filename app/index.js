@@ -8,6 +8,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 //import AlertContainer from './components/Alert/AlertContainer';
 import FlashMessage from 'react-native-flash-message';
 
+console.disableYellowBox = true;
+
 
 
 EStyleSheet.build({

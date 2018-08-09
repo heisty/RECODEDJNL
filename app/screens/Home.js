@@ -21,7 +21,8 @@ import {
   offlineLogin,
   customerActive,
   offlineLoginReset,
-  returnActive
+  returnActive,
+  customerQueue
 } from '../actions/customerActions';
 import {testServerConnection} from '../actions/connectionActions';
 import {deleteAvail} from '../actions/PopulateStaff';
@@ -92,6 +93,12 @@ class Home extends Component {
       decription: description,
       type: type
     })
+ }
+
+ handleCancel = (availid) =>{
+  this.props.dispatch(deleteAvail(availid));
+  let position = this.props.position;
+  this.props.dispatch(customerQueue(position));
  }
 
 
@@ -231,7 +238,7 @@ class Home extends Component {
                         <Text style={[styles.header,{color:'#000000',fontSize:18,textAlign:'center'}]}>
                             {item.servicename}
                         </Text>
-                        <Button onPress={()=> this.props.dispatch(deleteAvail(availid))} width={80} height={40} borderRadius={6} backgroundColor="red">
+                        <Button onPress={()=> this.handleCancel(availid)} width={80} height={40} borderRadius={6} backgroundColor="red">
                             <Text style={[styles.header,{color:'#FFFFFF',fontSize:18,textAlign:'center'}]}>Cancel Order</Text>
                         </Button>
                     </Card>

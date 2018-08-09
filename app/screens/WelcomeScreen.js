@@ -96,7 +96,14 @@ class WelcomeScreen extends React.Component{
 
 	nameSubmit=()=>{
 		if(this.state.username===null||this.state.password===null){
-			this.showAlert("Please Put Your Username/Password","We need a username and password so we can provide you the best service","danger");
+			Alert.alert(
+        	'Put some info.',
+        	"If you are new , don't worry we will automatically create your account.",
+        	[
+        	  {text: 'Okay'}
+       		 ],
+        	{cancelable: false}
+        	);
 		}
 
 		else{
@@ -161,7 +168,7 @@ class WelcomeScreen extends React.Component{
 			this.setState({isSubmit: true})
         	this.props.dispatch(offlineLogin(this.state.username,this.state.password));
         	this.navigateStack("bottomNavigation");
-        	
+
 
 		}
 
@@ -187,7 +194,7 @@ class WelcomeScreen extends React.Component{
 		return(
 			<Container>
 				
-				<Card flex={3} alignItems="center" justifyContent="center">
+				<Card flex={6} flexDirection="column" alignItems="center" justifyContent="center">
 					<Text>Hello there. Tell us your name.</Text>
 				{/*INPUT*/}
 					<Input onChangeText={this.handleUsernameChange} value={this.state.username} width={Dimensions.get('window').width-50} height={50} color="#000000" borderWidth={1} borderRadius={8} borderColor="#246C34" placeholder={this.state.usernamePlaceholder} textAlign="center"/>

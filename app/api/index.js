@@ -10,8 +10,10 @@ exports.AVAIL_SERVICE = `${API_URL}/availservice`;
 exports.ADD_CUSTOMER_SERVICE = `${API_URL}/addcustomerservice`;
 exports.UPDATE_CUSTOMER_SERVICE = `${API_URL}/updatecustomerservicestate`;
 exports.UPDATE_CUSTOMER_INFO = `${API_URL}/updatecustomerinfo`;
+exports.UPDATE_CUSTOMER_ADDRESS = `${API_URL}/updatecustomeraddress`;
 exports.COUNT_ACTIVE = `${API_URL}/countactive`;
 exports.POSITION_ACTIVE = `${API_URL}/positionactive`;
+exports.CUST_QUEUE = `${API_URL}/customerqueue`;
 
 
 //STAFF
@@ -24,6 +26,7 @@ exports.GET_STAFF_TRANSACTION = `${API_URL}/getstafftransaction`;
 exports.GET_STAFF_PROFILE = `${API_URL}/retrievestaffprofile`;
 exports.UPDATE_STAFF_PROFILE = `${API_URL}/updatestaffprofile`;
 exports.LOGIN_ADMIN = `${API_URL}/loginadmin`;
+
 
 
 //POPS

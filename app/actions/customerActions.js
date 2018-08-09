@@ -7,7 +7,10 @@ import {
 	UPDATE_CUSTOMER_INFO,
 	COUNT_ACTIVE,
 	POSITION_ACTIVE,
-	ACTIVE_SERVICES
+	ACTIVE_SERVICES,
+	UPDATE_CUSTOMER_ADDRESS,
+	ADD_CUSTOMER_SERVICE,
+	CUST_QUEUE
 } from '../api';
 
 export const custIn=(username,password)=>{
@@ -138,7 +141,7 @@ export const custUp=(username,password)=>{
 }
 
 
-export const availService=(userid,serviceid,servicename,servicetype,staffid,staffname)=>{
+export const availService=(userid,username,serviceid,servicename,servicetype,staffid,staffname)=>{
 	// this is a thenable twice insertions and a must.
 	//first is insert to customer schema
 	let position = null;
@@ -152,21 +155,18 @@ export const availService=(userid,serviceid,servicename,servicetype,staffid,staf
 			position+=1;
 			if(servicetype==="home"){
 				position=null;
-			}
-
-
-			
-			
+			}	
 		})
 		.then(()=>{
 			console.warn(position);
-			return axios.post(AVAIL_SERVICE,{userid,serviceid,servicename,servicetype,staffid,staffname,position}).then((response)=>{
+			return axios.post(AVAIL_SERVICE,{userid,username,serviceid,servicename,servicetype,staffid,staffname,position}).then((response)=>{
 				dispatch({
 				type: "AVAIL_SUCCESS",
 				availsuccess: true,
 				message: "Your service is booked.",
 				isDisplay: true,
 			});
+				
 			}).catch((error)=>{
 				console.warn(error,error.response,error.response.status);
 			})
@@ -176,6 +176,19 @@ export const availService=(userid,serviceid,servicename,servicetype,staffid,staf
 		})
 	}
 
+}
+
+export const saveToActiveService = (userid,username,serviceid,servicename,servicetype,staffid,staffname,date) =>{
+	return function(dispatch){
+		console.warn("RECEIVE DISPATCHING");
+		return axios.post(ADD_CUSTOMER_SERVICE,{userid,username,serviceid,servicename,servicetype,staffid,staffname,date}).then((response)=>{
+
+			console.warn("Succeed");
+
+		}).catch((error)=>{
+			console.warn("AVETIACTIVESER",error);
+		});
+	}
 }
 
 export const updateCustomerInfo=(
@@ -190,16 +203,26 @@ export const updateCustomerInfo=(
 	contact,
 	street,
 	brgy,
-	city
+	city,
+	latitude,
+	longitude,
 	)=>{
 
 	return function(dispatch){
 		return axios.post(UPDATE_CUSTOMER_INFO,{userid,firstname,lastname,contact}).then((response)=>{
 			console.warn("Success");
+			dispatch(saveCustomerAddress(userid,street,brgy,latitude,longitude))
 			dispatch(availService(userid,serviceid,servicename,servicetype,staffid,staffname));
 		}).catch((error)=>{
 			console.warn("Not update");
 		})
+	}
+}
+
+
+export const saveCustomerAddress = (userid,street,brgy,city,latitude,longitude) =>{
+	return function(dispatch){
+		return axios.post(UPDATE_CUSTOMER_ADDRESS,{userid,street,brgy,city,latitude,longitude})
 	}
 }
 
@@ -255,9 +278,27 @@ export const returnActive = (userid) =>{
 					type: "CUST_ACTIVE_SERVICE",
 					services
 				});
+			if(services.length===0){
+				dispatch({
+				type: "AVAIL_SUCCESS",
+				availsuccess: false,
+				message: null,
+				isDisplay: null,
+			});
+			}
 			console.warn("RA",services);
 		}).catch((error)=>{
 			console.warn("RA",error);
+		})
+	}
+}
+
+export const customerQueue = (position) =>{
+	return function(dispatch){
+		return axios.post(CUST_QUEUE,{position}).then((response)=>{
+			console.warn("CQSuccess");
+		}).catch((error)=>{
+			console.warn("CQ",error)
 		})
 	}
 }

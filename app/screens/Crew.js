@@ -51,7 +51,7 @@ class Crew extends Component {
                 <Card width={110} margin={10} height={110} borderRadius={360} backgroundColor="white" borderWidth={1}>
                   
                 </Card>
-                <Text>{item.name}</Text>
+                <Text>@{item.username}</Text>
               </Button>
              
 

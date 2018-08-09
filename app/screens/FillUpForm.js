@@ -8,7 +8,7 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {updateCustomerInfo} from '../actions/customerActions';
+import {updateCustomerInfo,saveToActiveService} from '../actions/customerActions';
 
 import {
 	Text,
@@ -66,6 +66,7 @@ class FillUpForm extends Component {
   };
   handleSubmit = (serviceid,servicename,staffid,staffname) =>{
     let servicetype="home";
+    let date = new Date();
     let firstname = this.state.firstname;
     let lastname = this.state.lastname;
     let contact = this.state.contact;
@@ -74,7 +75,8 @@ class FillUpForm extends Component {
     let city = this.state.city;
     let userid = this.props.userid;
     if(firstname && lastname && contact && street && brgy && city){
-    this.props.dispatch(updateCustomerInfo(userid,serviceid,servicename,servicetype,staffid,staffname,firstname,lastname,contact,street,brgy,city));
+    this.props.dispatch(updateCustomerInfo(userid,this.props.username,serviceid,servicename,servicetype,staffid,staffname,firstname,lastname,contact,street,brgy,city));
+    this.props.dispatch(saveToActiveService(userid,this.props.username,serviceid,servicename,servicetype,staffid,staffname,date));
     }
     else{
         Alert.alert(
@@ -140,8 +142,8 @@ class FillUpForm extends Component {
 var mapStateToProps = (state) =>{
   return{
       userid: state.customer.userid,
-      username: state.customer.customerUsernameNotOnline,
-  }
+      username: state.customer.username,
+}
 }
 
 module.exports = connect(mapStateToProps)(FillUpForm);

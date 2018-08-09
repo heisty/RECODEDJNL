@@ -26,9 +26,18 @@ import {StackActions,NavigationActions} from 'react-navigation';
 
 class StaffHome extends Component {
   componentDidMount(){
-    this.props.dispatch(getAppointment(this.props.staffid));
-    this.props.dispatch(getStaffTransaction(this.props.staffid));
-    this.props.dispatch(getStaffProfile(this.props.staffid));
+    this.timer = setInterval(()=>{
+      this.props.dispatch(getAppointment(this.props.staffid));
+      this.props.dispatch(getStaffTransaction(this.props.staffid));
+      this.props.dispatch(getStaffProfile(this.props.staffid));
+
+    },3000)
+    
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer);
+    this.timer = null;
   }
 	constructor(props) {
 	  super(props);
@@ -100,7 +109,7 @@ class StaffHome extends Component {
             return(
                 <Card alignItems="center" justifyContent="center">
                 <Button onPress={()=> this.setState({isOpenAppointment: !this.state.isOpenAppointment,activeUser: user,activeService:service,activeType: typeservice,activeDate:date})} alignItems="center" borderRadius={8} marginTop={10} justifyContent="center" width={width-60} height={60} backgroundColor="teal">
-                <Text style={[styles.header,{color: '#FFFFFF',fontSize: 20}]}>{item.username} appointed you!</Text>
+                <Text style={[styles.header,{color: '#FFFFFF',fontSize: 20}]}>{user} appointed you!</Text>
                 </Button>
                 </Card>
               );

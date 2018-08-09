@@ -9,7 +9,7 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {availService,removeAvailSuccess} from '../actions/customerActions';
+import {availService,removeAvailSuccess,saveToActiveService} from '../actions/customerActions';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage} from 'react-native-flash-message';
 //import {staff} from '../inappData/staff';
@@ -51,7 +51,8 @@ class Purchase extends Component {
     // {
   if(!this.props.availsuccess)
     {
-      this.props.dispatch(availService(this.props.userid,serviceId,servicename,servicetype,this.state.staffid,staffname));
+      this.props.dispatch(availService(this.props.userid,this.props.username,serviceId,servicename,servicetype,this.state.staffid,staffname));
+      this.props.dispatch(saveToActiveService(this.props.userid,this.props.username,serviceId,servicename,servicetype,this.state.staffid,staffname));
     }
 
     else{
@@ -193,6 +194,7 @@ var mapStateToProps = (state) =>{
   return{
     staff: state.customer.staff,
     userid: state.customer.userid,
+    username: state.customer.username,
     availsuccess: state.alert.availsuccess,
     message: state.alert.message,
     isDisplay: state.alert.isDisplay,

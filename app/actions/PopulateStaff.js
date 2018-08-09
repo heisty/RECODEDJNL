@@ -16,6 +16,15 @@ export const getAppointment = (staffid) =>{
 				type: "GET_APPOINTMENT",
 				appointment
 			})
+
+			//if(!appointment.isEmpty({})){
+				dispatch({
+					type: "AVAIL_SUCCESS",
+					availsuccess: false,
+					message: null,
+					isDisplay: null,
+				})
+			//}
 		}).catch((error)=>{
 			console.warn("GET APPOINTMENT",error);
 		});

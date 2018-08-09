@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import {populateDispatcher,populateCustomer,populateStaff} from '../actions/PopulateDispatcher';
 import {getRecords} from '../actions/PopulateDispatcher';
+import {StackActions,NavigationActions} from 'react-navigation';
 class AdminHome extends Component {
 	componentDidMount(){
 		setInterval(()=>{
@@ -34,14 +35,31 @@ class AdminHome extends Component {
 	  	isTransaction: false,
 	  };
 	}
+
+  logout = () =>{
+      const resetActions = StackActions.reset({
+        index:0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({
+            routeName: "componentNavigation",
+          }),
+        ]
+      });
+      this.props.navigation.dispatch(resetActions);
+    }
   render() {
   	const { width,height } = Dimensions.get('window');
   	const {records} = this.props;
     return (
       <Container>
-      	<Card width={width} height={30} backgroundColor="teal">
-      		<Text style={[styles.header,{color: '#FFFFFF',fontSize: 20,textAlign: 'center'}]}>ADMINISTRATOR ACCOUNT</Text>
-      	</Card>
+      <ScrollView>
+      	<Card width={width} alignItems="center" justifyContent="space-between" flexDirection="row" height={50} backgroundColor="white" borderWidth={1}>
+      		<Text style={[styles.header,{color: '#000000',fontSize: 14,textAlign: 'center'}]}>ADMINISTRATOR ACCOUNT</Text>
+      	 <Button onPress={()=> this.logout()} alignItems="center" justifyContent="center" width={60} borderRadius={8} height={30} backgroundColor="white" borderWidth={1}>
+          <Text style={[styles.header,{color: '#000000',fontSize: 14,textAlign: 'center'}]}>Logout</Text>
+        </Button>
+        </Card>
       	<Card alignItems="center" justifyContent="center">
       	<Button onPress={(text)=> this.setState({ isTransaction: !this.state.isTransaction })} alignItems="center" justifyContent="center" width={width-40} marginTop={10} borderRadius={8} height={60} backgroundColor="teal">
       		<Text style={[styles.header,{color: '#FFFFFF',fontSize: 25,textAlign: 'center'}]}>Transactions</Text>
@@ -83,11 +101,27 @@ class AdminHome extends Component {
       		</Card>
       		
       	}
-      	<Card alignItems="center" justifyContent="center">
-      	<Button onPress={(text)=> this.setState({  })} alignItems="center" justifyContent="center" width={width-40} marginTop={10} borderRadius={8} height={60} backgroundColor="teal">
-      		<Text style={[styles.header,{color: '#FFFFFF',fontSize: 25,textAlign: 'center'}]}>Others</Text>
-      	</Button>
+      	<Card marginTop={10} alignItems="center" justifyContent="center">
+      	   <Card width={width/2}>
+              <Text style={[styles.header,{color: '#000000',fontSize: 15}]}>*Based on the current rating of the service from our users.</Text>
+           </Card>
+           <Card width={width-40} borderWidth={1}>
+              <Text style={[styles.header,{color: '#000000',fontSize: 25}]}>We got 55% average rating from 10 people</Text>
+           </Card>
       	</Card>
+        
+        <Card marginTop={10} alignItems="center" justifyContent="center">
+        <Card marginTop={10} width={width-40} alignItems="flex-start" >
+              <Text style={[styles.header,{color: '#000000',fontSize: 13}]}>BAD:</Text>
+              <Text style={[styles.header,{color: '#000000',fontSize: 13}]}>DONT LIKE:</Text>
+              <Text style={[styles.header,{color: '#000000',fontSize: 13}]}>NORMAL:</Text>
+              <Text style={[styles.header,{color: '#000000',fontSize: 13}]}>GOOD:</Text>
+              <Text style={[styles.header,{color: '#000000',fontSize: 13}]}>GREAT:</Text>
+           </Card>
+          </Card>
+         
+
+        </ScrollView>
       </Container>
     );
   }
