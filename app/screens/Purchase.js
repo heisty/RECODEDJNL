@@ -31,6 +31,17 @@ class Purchase extends Component {
     })
   
   }
+
+  componentDidMount(){
+       this.setState({
+        staff: this.props.staff,
+     });
+
+       // geo
+
+       
+  }
+
   constructor(props) {
     super(props);
   
@@ -38,6 +49,7 @@ class Purchase extends Component {
       selectedPersona: null,
       staffid: null,
       staff: null,
+      
       
     };
   }
@@ -71,11 +83,7 @@ class Purchase extends Component {
 
   }
   
-  componentDidMount(){
-       this.setState({
-        staff: this.props.staff,
-     })
-  }
+  
 
   showAlert = (message,description,type) =>{
     showMessage({

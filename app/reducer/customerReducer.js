@@ -16,6 +16,15 @@ module.exports = (state=defaultState,action)=>{
 				offline: action.offline,
 				displayOffline: action.displayOffline,
 			}
+		case "UNLOGGED_USER":
+			return{
+				...state,
+				userid: null,
+				username: null,
+				password: null,
+				offline: null,
+				displayOffline: null,
+			}
 		case "CUST_ACTIVE_SERVICE":
 				return{
 					...state,

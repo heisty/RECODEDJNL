@@ -22,7 +22,8 @@ import {
   customerActive,
   offlineLoginReset,
   returnActive,
-  customerQueue
+  customerQueue,
+  unloggedUser
 } from '../actions/customerActions';
 import {testServerConnection} from '../actions/connectionActions';
 import {deleteAvail} from '../actions/PopulateStaff';
@@ -115,6 +116,20 @@ class Home extends Component {
       this.props.navigation.dispatch(resetActions);
   }
 
+  logout = () =>{
+      this.props.dispatch(unloggedUser());
+      const resetActions = StackActions.reset({
+        index:0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({
+            routeName: "componentNavigation",
+          }),
+        ]
+      });
+      this.props.navigation.dispatch(resetActions);
+    }
+
   render(){
 
     console.warn(this.props.userid);
@@ -204,15 +219,17 @@ class Home extends Component {
       	<Card>
       		{/*Greeting*/}
 
-      			<Card backgroundColor="white" alignItems="center" flexDirection="row" justifyContent="center" width={width} height={50}>
-      				<Text style={[styles.header,{fontSize: 20,color: 'rgba(0,0,0,0.8)'}]}>Good Day! ,</Text>
-      				<Text style={[styles.header,{fontSize: 20,color: 'rgba(0,0,0,0.8)'}]}>{username}@{status}</Text>
-      			</Card>
+      			<Card alignItems="center" height={60} flexDirection="row" justifyContent="space-between" borderBottomWidth={1}>
+        <Text style={[styles.header,{color: '#000000',fontSize: 15}]}>Customer Account {this.props.username}</Text>
+         <Button onPress={()=> this.logout()} alignItems="center" justifyContent="center" width={60} borderRadius={8} height={30} backgroundColor="white" borderWidth={1}>
+          <Text style={[styles.header,{color: '#000000',fontSize: 14,textAlign: 'center'}]}>Logout</Text>
+        </Button>
+      </Card>
 
       		{/*End Greet*/}
 
       	{/*Notify customer queue*/}
-      			<Card alignItems="center" justifyContent="center">
+      			<Card marginTop={10} alignItems="center" justifyContent="center">
       			<Card borderRadius={5} borderWidth={1} backgroundColor="teal" alignItems="center" justifyContent="center" width={width-30} height={200}>
       				<Text style={[styles.header,{color: 'white'}]}>Customer Queue</Text>
       				{position && position!==0 && <Text style={[styles.header,{color: 'white',fontSize: 20}]}>You are the {position}{postfix}/{total} customers.</Text>}

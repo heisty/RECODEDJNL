@@ -102,7 +102,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -150,6 +150,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sound')
     implementation project(':react-native-maps')
     implementation project(':react-native-network-info')
     implementation fileTree(dir: "libs", include: ["*.jar"])

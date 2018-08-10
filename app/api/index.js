@@ -1,5 +1,6 @@
-var API_URL = 'http://192.168.30.3:3000/v1';
-//var API_URL = 'https://boiling-journey-93382.herokuapp.com/v1';
+//var API_URL = 'http://192.168.30.3:3000/v1';
+var API_URL = 'https://boiling-journey-93382.herokuapp.com/v1';
+var GEO_URL = 'http://maps.googleapis.com/maps/api/geocode/json?';
 
 //CUSTOMER
 exports.CUST_IN = `${API_URL}/customersignin`;
@@ -41,3 +42,10 @@ exports.DEL_STAFF = `${API_URL}/deletebyid`;
 exports.DEL_CUST = `${API_URL}/deletebycustomerid`;
 exports.DEL_SERVICE = `${API_URL}/deleteservices`;
 exports.DEL_AVAIL = `${API_URL}/deleteactiveavail`;
+
+
+
+// GPS
+
+exports.GEO_SUPPORT = GEO_URL;
+

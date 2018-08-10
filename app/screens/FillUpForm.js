@@ -17,7 +17,23 @@ import {
   Alert
 } from 'react-native';
 
+import {transformToAddress} from '../actions/gpsActions';
+
+
+
 class FillUpForm extends Component {
+  componentWillMount(){
+    navigator.geolocation.getCurrentPosition((position)=>{
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+       },(error)=> this.setState({
+        error: error.message
+       }),{
+        enableHighAccuracy: true,timeout: 20000,maximumAge:5000,
+       });
+  }
   constructor(props) {
     super(props);
   
@@ -29,6 +45,8 @@ class FillUpForm extends Component {
       street: null,
       brgy: null,
       city: null,
+      latitude: null,
+      longitude: null,
 
     };
 
@@ -89,9 +107,26 @@ class FillUpForm extends Component {
         );
     }
   }
+  componentDidMount(){
+    
+    
+
+  }
   render() {
   	const {width,height} = Dimensions.get('window');
     const { serviceid,servicename,staffid,staffname } = this.props.navigation.state.params;
+
+
+
+    let latitude = this.state.latitude;
+    let longitude = this.state.longitude;
+    console.warn(latitude,longitude);
+    //if(latitude && longitude && !this.state.street){
+      console.warn("WILL DISPATCH GPS");
+      this.props.dispatch(transformToAddress(latitude,longitude));
+   //ssssss }
+
+
 
     return (
 
@@ -99,7 +134,7 @@ class FillUpForm extends Component {
           <ScrollView>
          <Card>
       	<Card backgroundColor="teal" alignItems="center" justifyContent="center" width={width} height={100}>
-      		<Text style={[styles.header],{color: '#FFFFFF',fontSize: 20}}>We hate paperworks too.</Text>
+      		<Text style={[styles.header],{color: '#FFFFFF',fontSize: 20}}>We hate paperworks too. </Text>
       		<Text style={[styles.header],{color: '#FFFFFF',fontSize: 15}}>Please bare with us and fill this short form.</Text>
       		<Text style={[styles.header],{color: '#FFFFFF',fontSize: 12}}>We will save this information.</Text>
       		<Text style={[styles.header],{color: '#FFFFFF',fontSize: 12}}>So next time you can just click submit.</Text>

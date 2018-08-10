@@ -360,3 +360,6 @@ export const removeOfflineDisplay=(serverconnection)=>({
 	serverconnection,
 	offlineDisplay: false,
 });
+export const unloggedUser=()=>({
+	type: "UNLOGGED_USER",
+})

@@ -33,6 +33,7 @@ class AdminHome extends Component {
 	
 	  this.state = {
 	  	isTransaction: false,
+      isOpenTransaction: false
 	  };
 	}
 
@@ -68,37 +69,49 @@ class AdminHome extends Component {
 
       	{this.state.isTransaction &&
       		
-      		<Card alignItems="center" justifyContent="center">
-      		<Card marginTop={10} borderWidth={1} width={width-20} height={height-200} alignItems="center" justifyContent="center">
+      		<Card flex={1} alignItems="center" justifyContent="center">
       		
-      		<Card borderBottomWidth={1} alignItems="center" justifyContent="space-between" flexDirection="row" width={width-20} height={40}>
-      			<Text>Service Name</Text>
-      			<Text>Staff</Text>
-      			<Text>Date</Text>
-      		</Card>
-      		<ScrollView style={{width: width-20}}>
       			<FlatList
       		data={records}
       		renderItem={({item})=>{
       		 let userid = item._id;
       		 return(
-      		
-      		      		<Button  onPress={()=> this.setState({userid: userid})} borderBottomWidth={1} alignItems="center" justifyContent="space-between" flexDirection="row" width={width-20} height={40}>
-      		      			<Text>{item.servicename}</Text>
-      		      			<Text>{item.staffname}</Text>
-      		      			<Text>{item.date}</Text>
-      		      		</Button>
+             
+      		        <Card alignItems="center" justifyContent="center">
+                   
+      		      		<Button  alignItems="center" justifyContent="center" marginTop={10} width={width-60} height={50} borderRadius={5} backgroundColor="white" borderWidth={1}>
+                      <Text style={[styles.header,{color:'darkgreen',fontSize:15}]}>{item.staffname}</Text>
+                    </Button>
+                  
+                
+                  <Card alignItems="center" justifyContent="center"  width={width-60} height={150} borderRadius={5} backgroundColor="white" borderWidth={1}>
+                  <Text style={[styles.header,{color:'darkgreen',fontSize:20}]}>
+                    {item.servicename} Service
+                  </Text>
+                  <Text style={[styles.header,{color:'darkgreen',fontSize:20}]}>
+                    Type: {item.servicetype}
+                  </Text>
+                  <Text style={[styles.header,{color:'darkgreen',fontSize:20}]}>
+                    Customer {item.username}
+                  </Text>
+                  <Text style={[styles.header,{color:'darkgreen',fontSize:20}]}>
+                    On August 10, 2018
+                  </Text>
+                  </Card>
+                 
+                  </Card>
+                  
       		
       		      			);
       		}
       		}
       		keyExtractor={(item)=> item._id}
       		/>
+        </Card>
 
-      		</ScrollView>
       		
-      		</Card>
-      		</Card>
+      		
+      		
       		
       	}
       	<Card marginTop={10} alignItems="center" justifyContent="center">

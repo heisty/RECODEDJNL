@@ -93,7 +93,9 @@ class StaffHome extends Component {
     	<ScrollView>
     	<Card alignItems="center" height={60} flexDirection="row" justifyContent="space-between" borderBottomWidth={1}>
      		<Text style={[styles.header,{color: '#000000',fontSize: 15}]}>Staff Account {this.props.staffname}</Text>
-        <Button onPress={()=> this.logout()} width={80} height={20} borderRadius={6} backgroundColor="darkred"><Text style={[styles.header,{color: '#FFFFFF',fontSize: 14}]}>LOGOUT</Text></Button>
+         <Button onPress={()=> this.logout()} alignItems="center" justifyContent="center" width={60} borderRadius={8} height={30} backgroundColor="white" borderWidth={1}>
+          <Text style={[styles.header,{color: '#000000',fontSize: 14,textAlign: 'center'}]}>Logout</Text>
+        </Button>
      	</Card>
      	<Card marginTop={10} alignItems="center" justifyContent="center">
      		<Card width={width-30} height={200} borderRadius={5}  borderWidth={1}>

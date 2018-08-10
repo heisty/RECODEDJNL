@@ -206,6 +206,9 @@ class AdminSalon extends Component {
       		</ScrollView>
       		
       		</Card>
+                  <Button onPress={()=> this.deleteByCustomerId()} width={width/2} height={50} alignItems="center" justifyContent="center"  backgroundColor="red" borderRadius={4}>
+                        <Text style={{textAlign: 'center',fontSize: 20,color: '#FFFFFF'}}>View User</Text>
+                  </Button>
       		<Button onPress={()=> this.deleteByCustomerId()} width={width/2} height={50} alignItems="center" justifyContent="center"  backgroundColor="red" borderRadius={4}>
       			<Text style={{textAlign: 'center',fontSize: 20,color: '#FFFFFF'}}>Delete User</Text>
       		</Button>

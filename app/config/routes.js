@@ -189,13 +189,40 @@ const MainNavigation = createStackNavigator({
 	bottomAdminNavigation: {
 		screen: bottomAdminNavigation,
 		navigationOptions: {
-			header: ()=> null
+			header: ()=>  {
+				return(
+						
+					<View style={{width: Dimensions.get('window').width
+						, height:60, backgroundColor:'#FFFFFF',
+						alignItems: 'center',justifyContent: 'center',borderBottomWidth: 1,borderBottomColor: 'gray'}}>
+						<Text style={{color: 'darkgreen',fontSize: 30,fontFamily: 'Oswald-Light'}}>
+							JNL SALON
+						</Text>
+					</View>
+
+
+					);
+			}
+		
 		}
 	},
 	bottomStaffNavigation: {
 		screen: bottomStaffNavigation,
 		navigationOptions: {
-			header: ()=> null
+			header: ()=>  {
+				return(
+						
+					<View style={{width: Dimensions.get('window').width
+						, height:60, backgroundColor:'#FFFFFF',
+						alignItems: 'center',justifyContent: 'center',borderBottomWidth: 1,borderBottomColor: 'gray'}}>
+						<Text style={{color: 'darkgreen',fontSize: 30,fontFamily: 'Oswald-Light'}}>
+							JNL SALON
+						</Text>
+					</View>
+
+
+					);
+			}
 		}
 	},
 	Modal: {
@@ -210,7 +237,7 @@ const MainNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	}
-},{initialRouteName: 'componentNavigation',navigationOptions: {
+},{initialRouteName: 'bottomAdminNavigation',navigationOptions: {
 	
 }})
 
