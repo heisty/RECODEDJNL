@@ -11,6 +11,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "moment": "^2.22.2",
+    "moments": "^0.0.2",
     "mongoose": "^5.2.5",
     "morgan": "^1.9.0",
     "nodemon": "^1.18.3",

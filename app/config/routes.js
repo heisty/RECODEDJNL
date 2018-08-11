@@ -237,7 +237,7 @@ const MainNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	}
-},{initialRouteName: 'bottomAdminNavigation',navigationOptions: {
+},{initialRouteName: 'componentNavigation',navigationOptions: {
 	
 }})
 

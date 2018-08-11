@@ -123,36 +123,32 @@ class Purchase extends Component {
     <ScrollView style={{backgroundColor:"#FFFFFF"}}>
       <Container>
 
-      <Card width={width} height={240} backgroundColor="#246C34">
-
-      	<Card alignItems="center" justifyContent="center" backgroundColor="teal" width={width} height={200}>
-
-      				
-      			<Text style={[styles.header],{color: 'white',fontSize: 25}}>{service.title}</Text>	
-      			<Card marginTop={20} width={width-20}>
-      			<Text style={[styles.header],{color: 'white',fontSize: 15}}>{service.description}</Text>
-      	</Card></Card>
-      	<Text style={[styles.header,{color: '#FFFFFF',fontSize: 18,fontWeight: 'bold'}]}>PRICE: PHP{service.price}</Text>
-      	</Card>
+     
       	{/*PROFILES*/}
 
 
-      	<Card justifyContent="center" width={width} height={180} backgroundColor="#246C34">
-      	 <Text style={[styles.header,{color: '#FFFFFF',fontSize: 15}]}>Swap Left to Right</Text>
-        <Card width={width} height={100}  backgroundColor="white" justifyContent="center">
+      	
       {/*FLAT LIST OF STAFF*/}
-      
-        <FlatList 
+      <Card marginTop={10} alignItems="center" justifyContent="center">
+      <Card width={width-50} height={60}  borderWidth={1} alignItems="center" justifyContent="center">
+        <Text>Please choose a staff.</Text>
+      </Card>
+      <Card width={width-50} height={170} borderRadius={5} borderWidth={1} alignItems="center" justifyContent="center">
+       { <FlatList 
           data={this.props.staff}
           horizontal={true}
           renderItem={({item})=> {
             var username = item.username;
             var id = item._id;
             return(
-             
-              <Button onPress={()=> this.setState({selectedPersona: username,staffid:id}) } alignItems="center"  justifyContent="space-between" width={80} margin={10} height={80} borderRadius={360} backgroundColor="gray">
-                  <Text>{item.username}</Text>
+            <Card alignItems="center" justifyContent="center">
+
+              <Button onPress={()=> this.setState({selectedPersona: username,staffid:id}) } alignItems="center"  justifyContent="space-between" width={80} margin={10} height={80} borderRadius={360} backgroundColor="white" borderWidth={1}>
+                  
               </Button>
+              <Text>{item.username}</Text>
+            </Card>
+
             
 
               );
@@ -161,13 +157,12 @@ class Purchase extends Component {
           keyExtractor={(item)=> item._id}
 
         
-          />
+          />}
+         </Card>
+              </Card>
             
       {/**/}
-      	</Card>
-      	<Text style={[styles.header,{color: '#FFFFFF',fontSize: 15}]}>Please choose your desired massager or employee.</Text>
-        {this.state.selectedPersona && <Text style={[styles.header,{color: '#FFFFFF',fontSize: 25}]}>You chose {this.state.selectedPersona}</Text>}
-      	</Card>
+      
 
 
 

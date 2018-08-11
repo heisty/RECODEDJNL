@@ -1,5 +1,5 @@
-//var API_URL = 'http://192.168.30.3:3000/v1';
-var API_URL = 'https://boiling-journey-93382.herokuapp.com/v1';
+var API_URL = 'http://192.168.30.5:3000/v1';
+//var API_URL = 'https://boiling-journey-93382.herokuapp.com/v1';
 var GEO_URL = 'http://maps.googleapis.com/maps/api/geocode/json?';
 
 //CUSTOMER
