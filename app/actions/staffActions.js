@@ -76,10 +76,7 @@ export const signInAdmin = (username,password) =>{
 		return axios.post(LOGIN_ADMIN,{username,password}).then((response)=>{
 			console.warn("logged",response.data);
 			
-			if(!response.data){
-				dispatch(signInStaff(username,password));
-			}
-			else{
+			
 				let {username,_id} = response.data;
 				dispatch({
 					type: "IS_ADMIN",
@@ -88,14 +85,17 @@ export const signInAdmin = (username,password) =>{
 					isadmin: true
 				});
 				console.warn("Admin");
-			}
+
+				dispatch({
+				type: "LOGIN_TYPE",
+				login: "admin",
+			});
+			
 		}).catch((error)=>{
-			if(error.response.status===401){
-				console.warn("401");
-			}
-			if(error.response.status===422){
-				console.warn("422");
-			}
+			dispatch({
+					type: "AUTH_FAILED",
+					auth:false
+				})
 		});
 	}
 }
@@ -112,14 +112,24 @@ export const signInStaff = (username,password) =>{
 				staffid: userid,
 				staffname: username
 			});
+
+			dispatch({
+				type: "LOGIN_TYPE",
+				login: "staff",
+			});
 			console.warn(userid);
 		}).catch((error)=>{
 			console.warn(error);
 			if(error.response.status===401){
 				console.warn("401");
+				dispatch({
+					type: "AUTH_FAILED",
+					auth:false,
+				})
 			}
 			if(error.response.status===422){
 				console.warn("422");
+				dispatch(signInAdmin(username,password));
 			}
 		});
 	}

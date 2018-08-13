@@ -1,4 +1,4 @@
-var API_URL = 'http://192.168.30.5:3000/v1';
+var API_URL = 'http://192.168.30.3:3000/v1';
 //var API_URL = 'https://boiling-journey-93382.herokuapp.com/v1';
 var GEO_URL = 'http://maps.googleapis.com/maps/api/geocode/json?';
 
@@ -15,6 +15,7 @@ exports.UPDATE_CUSTOMER_ADDRESS = `${API_URL}/updatecustomeraddress`;
 exports.COUNT_ACTIVE = `${API_URL}/countactive`;
 exports.POSITION_ACTIVE = `${API_URL}/positionactive`;
 exports.CUST_QUEUE = `${API_URL}/customerqueue`;
+exports.FIND_ADDR_EXIST = `${API_URL}/findaddressexist`;
 
 
 //STAFF

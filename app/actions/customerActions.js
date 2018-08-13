@@ -10,7 +10,8 @@ import {
 	ACTIVE_SERVICES,
 	UPDATE_CUSTOMER_ADDRESS,
 	ADD_CUSTOMER_SERVICE,
-	CUST_QUEUE
+	CUST_QUEUE,
+	FIND_ADDR_EXIST
 } from '../api';
 
 export const custIn=(username,password)=>{
@@ -30,6 +31,10 @@ export const custIn=(username,password)=>{
 				displayOffline: true,
 			});
 			dispatch({
+				type: "LOGIN_TYPE",
+				login: "customer",
+			});
+			dispatch({
 				type: "SERVER_CONNECTED",
 				offlineDisplay: false,
 			})
@@ -38,7 +43,7 @@ export const custIn=(username,password)=>{
 			let message = "Sorry but for some reason, Cannot let you in.";
 			if(error.response.status===404){
 				console.warn("Signing Up.");
-				dispatch(custUp(username,password));
+				dispatch(authState(false));
 			}
 			if(error.response.status===401){
 				dispatch({
@@ -106,6 +111,10 @@ export const custUp=(username,password)=>{
 					sign: true,
 					signDisplay:true
 				});
+			dispatch({
+				type: "LOGIN_TYPE",
+				login: "customer"
+			})
 			dispatch({
 				type: "SERVER_CONNECTED",
 				offlineDisplay: false,
@@ -178,6 +187,8 @@ export const availService=(userid,username,serviceid,servicename,servicetype,sta
 
 }
 
+
+
 export const saveToActiveService = (userid,username,serviceid,servicename,servicetype,staffid,staffname,date) =>{
 	return function(dispatch){
 		console.warn("RECEIVE DISPATCHING");
@@ -193,17 +204,13 @@ export const saveToActiveService = (userid,username,serviceid,servicename,servic
 
 export const updateCustomerInfo=(
 	userid,
-	serviceid,
-	servicename,
-	servicetype,
-	staffid,
-	staffname,
 	firstname,
 	lastname,
 	contact,
 	street,
 	brgy,
 	city,
+	munc,
 	latitude,
 	longitude,
 	)=>{
@@ -211,18 +218,37 @@ export const updateCustomerInfo=(
 	return function(dispatch){
 		return axios.post(UPDATE_CUSTOMER_INFO,{userid,firstname,lastname,contact}).then((response)=>{
 			console.warn("Success");
-			dispatch(saveCustomerAddress(userid,street,brgy,latitude,longitude))
-			dispatch(availService(userid,serviceid,servicename,servicetype,staffid,staffname));
+			dispatch(saveCustomerAddress(userid,street,brgy,munc,city,latitude,longitude))
+			dispatch(alertMessageX("Fill Up Success.","We have recorded your data"));
+			
 		}).catch((error)=>{
-			console.warn("Not update");
+			console.warn("Not update",error);
 		})
 	}
 }
 
 
-export const saveCustomerAddress = (userid,street,brgy,city,latitude,longitude) =>{
+export const saveCustomerAddress = (userid,street,brgy,munc,city,latitude,longitude) =>{
 	return function(dispatch){
-		return axios.post(UPDATE_CUSTOMER_ADDRESS,{userid,street,brgy,city,latitude,longitude})
+		return axios.post(UPDATE_CUSTOMER_ADDRESS,{userid,street,brgy,munc,city,latitude,longitude}).then((response)=>{
+			console.warn("Success SCA");
+		}).catch((error)=>{
+			console.warn("SCA",error)
+		})
+	}
+}
+
+export const findAddrExist = (userid) =>{
+	return function(dispatch){
+		return axios.post(FIND_ADDR_EXIST,{userid}).then((response)=>{
+			let found = response.data.found;
+			
+			dispatch({
+				type: "ADDR_STATE",
+				found,
+			})
+			console.warn("FAE",found);
+		})
 	}
 }
 
@@ -308,6 +334,21 @@ export const customerQueue = (position) =>{
 
 
 // REMOVERS OF EFFECTS
+
+export const alertMessageX = (header,message) => ({
+	type: "ALERT",
+	header,
+	message,
+})
+export const loginState = (login) =>({
+	type: "LOGIN_TYPE",
+	login
+})
+
+export const authState = (auth) =>({
+	type: "AUTH_FAILED",
+	auth
+});
 
 export const removeLoginFailed = () =>({
 	type: "LOGIN_FAILED",

@@ -1,5 +1,15 @@
 import React from 'react';
-import {createStackNavigator,StackActions,NavigationActions} from 'react-navigation';
+import {
+	createStackNavigator,
+	StackActions,
+	NavigationActions,
+	createBottomTabNavigator,
+	createTopTabNavigator,
+	
+} from 'react-navigation';
+import {
+	createMaterialTopTabNavigator
+} from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import Header from '../components/Header';
@@ -15,6 +25,7 @@ import AdminHome from '../screens/AdminHome';
 import AdminSalon from '../screens/AdminSalon';
 import StaffHome from '../screens/StaffHome';
 import StaffProfile from '../screens/StaffProfile';
+import CustomerRegister from '../screens/CustomerRegister';
 import {populateDispatcher,populateStaff} from '../actions/PopulateDispatcher';
 import {
 	Image,
@@ -45,22 +56,22 @@ const bottomNavigation = createMaterialBottomTabNavigator({
 			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/salon.png')}/>
 		}
 	},
-	Crew: {
-		screen: Crew,
-		navigationOptions: {
-			tabBarLabel: 'Crew',
-			tabBarColor: 'purple',
-			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/crew.png')}/>
-		}
-	},
-	Feedback: {
-		screen: Feedback,
-		navigationOptions: {
-			tabBarLabel: 'Feedback',
-			tabBarColor: 'darkred',
-			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/feedback.png')}/>
-		}
-	}
+	// Crew: {
+	// 	screen: Crew,
+	// 	navigationOptions: {
+	// 		tabBarLabel: 'Crew',
+	// 		tabBarColor: 'purple',
+	// 		tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/crew.png')}/>
+	// 	}
+	// },
+	// Feedback: {
+	// 	screen: Feedback,
+	// 	navigationOptions: {
+	// 		tabBarLabel: 'Feedback',
+	// 		tabBarColor: 'darkred',
+	// 		tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/feedback.png')}/>
+	// 	}
+	// }
 },{
   initialRouteName: 'Home',
   shifting: false,
@@ -69,9 +80,39 @@ const bottomNavigation = createMaterialBottomTabNavigator({
   barStyle: { borderRadius: 8,width:Dimensions.get('window').width-50,marginBottom: 10,justifyContent:'center',alignSelf: 'center',backgroundColor: 'green' }
 });
 
+const customerAuthenticationNavigation = createMaterialTopTabNavigator({
+	CustomerLogin: {
+		screen: CustomerRegister,
+		navigationOptions: {
+			tabBarLabel: 'Customer Registration',
+			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/registration.png')}/>
+
+			
+
+		}
+
+	},
+	StaffLogin: {
+		screen: StaffLogin,
+		navigationOptions: {
+			tabBarLabel: 'Login',
+			tabBarIcon: ({ tintColor, focused }) => <Image resizeMode="contain" style={{width: 24,height: 24,}} source={require('./icons/login.png')}/>
+
+		}
+	}
+},{
+	shifting: false,
+	tabBarOptions:{
+		style: {backgroundColor: 'green'},
+		showIcon:true,
+		indicatorStyle: {backgroundColor: '#FFFFFF'},
+		labelStyle: {fontSize: 15,fontFamily: 'Oswald-Light'}
+	}
+});
+
 // for staff
 
-const bottomStaffNavigation = createMaterialBottomTabNavigator({
+const bottomStaffNavigation = createBottomTabNavigator({
 
 	StaffHome: {
 		screen: StaffHome,
@@ -99,7 +140,7 @@ const bottomStaffNavigation = createMaterialBottomTabNavigator({
   inactiveTintColor: '#000000',
   barStyle: { borderRadius: 8,width:Dimensions.get('window').width-50,marginBottom: 10,justifyContent:'center',alignSelf: 'center',backgroundColor: 'green' }
 })
-const bottomAdminNavigation = createMaterialBottomTabNavigator({
+const bottomAdminNavigation = createBottomTabNavigator({
 
 	AdminHome: {
 		screen: AdminHome,
@@ -206,6 +247,25 @@ const MainNavigation = createStackNavigator({
 		
 		}
 	},
+	customerAuthNavigation: {
+		screen: customerAuthenticationNavigation,
+		navigationOptions: {
+			header: ()=>  {
+				return(
+						
+					<View style={{width: Dimensions.get('window').width
+						, height:60, backgroundColor:'#FFFFFF',
+						alignItems: 'center',justifyContent: 'center',borderBottomWidth: 1,borderBottomColor: 'gray'}}>
+						<Text style={{color: 'darkgreen',fontSize: 30,fontFamily: 'Oswald-Light'}}>
+							JNL SALON
+						</Text>
+					</View>
+
+
+					);
+			}
+		}
+	},
 	bottomStaffNavigation: {
 		screen: bottomStaffNavigation,
 		navigationOptions: {
@@ -237,7 +297,7 @@ const MainNavigation = createStackNavigator({
 			header: ()=> null
 		}
 	}
-},{initialRouteName: 'componentNavigation',navigationOptions: {
+},{initialRouteName: 'customerAuthNavigation',navigationOptions: {
 	
 }})
 

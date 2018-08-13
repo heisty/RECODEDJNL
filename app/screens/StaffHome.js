@@ -17,6 +17,10 @@ import {
   deleteAvail
 } from '../actions/PopulateStaff';
 import {
+  loginState,
+  customerQueue
+} from '../actions/customerActions';
+import {
  Dimensions,
  Text,
  ScrollView,
@@ -55,17 +59,20 @@ class StaffHome extends Component {
 	  };
 	}
 
-  doneService=(availid)=>{
+  doneService=(availid,position)=>{
     this.props.dispatch(deleteAvail(availid));
+    this.props.dispatch(customerQueue(position));
   }
 
   logout = () =>{
+
+      this.props.dispatch(loginState(null));
       const resetActions = StackActions.reset({
         index:0,
         key: null,
         actions: [
             NavigationActions.navigate({
-            routeName: "componentNavigation",
+            routeName: "customerAuthNavigation",
           }),
         ]
       });
@@ -213,11 +220,12 @@ class StaffHome extends Component {
               data={appointment}
               renderItem={({item})=> {
                 let id = item._id;
+                let pos = item.position;
                 return(
 
                     <Card alignItems="center" justifyContent="space-between" flexDirection="row" >
                       <Text style={[styles.header,{color: '#000000',fontSize: 20,textAlign: 'center'}]}>{item.servicename}</Text>
-                      <Button onPress={()=> this.doneService(id)} width={90} height={60} backgroundColor="green" alignItems="center" justifyContent="center"><Text style={[styles.header,{color: '#FFFFFF',fontSize: 16}]}>Set Done</Text></Button>
+                      <Button onPress={()=> this.doneService(id,pos)} width={90} height={60} backgroundColor="green" alignItems="center" justifyContent="center"><Text style={[styles.header,{color: '#FFFFFF',fontSize: 16}]}>Set Done</Text></Button>
                       </Card>
 
                   );

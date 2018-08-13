@@ -9,7 +9,9 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-
+import {
+  loginState
+} from '../actions/customerActions';
 import {
   Dimensions,
   Text,
@@ -38,6 +40,7 @@ class AdminHome extends Component {
 	}
 
   logout = () =>{
+      this.props.dispatch(loginState(null));
       const resetActions = StackActions.reset({
         index:0,
         key: null,

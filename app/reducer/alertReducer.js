@@ -1,9 +1,29 @@
 let defaultState = {
-	loginfailed: undefined,
+	loginfailed: null,
+	login: null
 }
 
 module.exports = (state=defaultState,action)=>{
 	switch(action.type){
+	case "ALERT":
+	return {
+		header: action.header,
+		message: action.message,
+	}
+	case "ADDR_STATE":
+		return{
+			found: action.found,
+		}
+	case "LOGIN_TYPE":
+		return{
+			...state,
+			login: action.login,
+		}
+	case "AUTH_FAILED": 
+		return{
+			...state,
+			auth: action.auth,
+		}
 	case "AVAIL_SUCCESS":
 		return{
 			...state,

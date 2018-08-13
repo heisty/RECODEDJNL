@@ -54,7 +54,33 @@ class Purchase extends Component {
     };
   }
 
-  handleAvail=(serviceId,servicename,servicetype,staffname)=>{
+  handlePurchase=(staffname,id)=>{
+    var { service } = this.props.navigation.state.params;
+    this.setState({selectedPersona: staffname,staffid:id})
+
+    Alert.alert(
+      'Confirm Purchase',
+      `${service.title} by Staff ${staffname}`,
+      [
+      {
+        text: 'Cancel',
+      },
+      {
+        text: 'Home Avail',   
+      },
+      {
+        text: 'Salon Avail',onPress:()=> this.handleAvail(service._id,service.title,"salon",id,staffname),
+      }
+      ],
+      {cancellable:false}
+
+
+      );
+
+
+  }
+
+  handleAvail=(serviceId,servicename,servicetype,staffid,staffname)=>{
 
     // this.props.dispatch(alreadyHaveService(this.props.userid));
     // let canAvail = this.props.canAvail;
@@ -97,7 +123,7 @@ class Purchase extends Component {
   render() {
     //OUR FAILSAFE MUST BE ADDED OUT Set return iS AUTO 1
     var { staff,userid,availsuccess,message,isDisplay } = this.props;
-  	var { service } = this.props.navigation.state.params;
+  	
     var { navigate } = this.props.navigation;
   	const { width,height } = Dimensions.get('window');
     console.warn(availsuccess,isDisplay);
@@ -143,7 +169,7 @@ class Purchase extends Component {
             return(
             <Card alignItems="center" justifyContent="center">
 
-              <Button onPress={()=> this.setState({selectedPersona: username,staffid:id}) } alignItems="center"  justifyContent="space-between" width={80} margin={10} height={80} borderRadius={360} backgroundColor="white" borderWidth={1}>
+              <Button onPress={()=> this.handlePurchase(username,id) } alignItems="center"  justifyContent="space-between" width={80} margin={10} height={80} borderRadius={360} backgroundColor="white" borderWidth={1}>
                   
               </Button>
               <Text>{item.username}</Text>

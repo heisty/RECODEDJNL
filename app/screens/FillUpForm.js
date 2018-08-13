@@ -8,7 +8,7 @@ import Input from '../components/Input';
 import Pic from '../components/Pic';
 import Card from '../components/Card';
 import styles from './styles';
-import {updateCustomerInfo,saveToActiveService} from '../actions/customerActions';
+import {updateCustomerInfo} from '../actions/customerActions';
 
 import {
 	Text,
@@ -44,6 +44,7 @@ class FillUpForm extends Component {
       contact: null,
       street: null,
       brgy: null,
+      munc: null,
       city: null,
       latitude: null,
       longitude: null,
@@ -77,24 +78,28 @@ class FillUpForm extends Component {
       brgy: text,
      })
   };
+  handleMunc=(text)=>{
+    this.setState({
+      munc: text,
+    })
+  }
   handleCity=(text)=>{
      this.setState({
       city: text,
      })
   };
-  handleSubmit = (serviceid,servicename,staffid,staffname) =>{
-    let servicetype="home";
-    let date = new Date();
+  handleSubmit = () =>{
     let firstname = this.state.firstname;
     let lastname = this.state.lastname;
     let contact = this.state.contact;
     let street = this.state.street;
     let brgy = this.state.brgy;
+    let munc = this.state.munc;
     let city = this.state.city;
     let userid = this.props.userid;
     if(firstname && lastname && contact && street && brgy && city){
-    this.props.dispatch(updateCustomerInfo(userid,this.props.username,serviceid,servicename,servicetype,staffid,staffname,firstname,lastname,contact,street,brgy,city));
-    this.props.dispatch(saveToActiveService(userid,this.props.username,serviceid,servicename,servicetype,staffid,staffname,date));
+    this.props.dispatch(updateCustomerInfo(userid,firstname,lastname,contact,street,brgy,munc,city));
+
     }
     else{
         Alert.alert(
@@ -114,7 +119,7 @@ class FillUpForm extends Component {
   }
   render() {
   	const {width,height} = Dimensions.get('window');
-    const { serviceid,servicename,staffid,staffname } = this.props.navigation.state.params;
+    const { serviceid,servicename,staffid,staffname } = this.props;
 
 
 
@@ -154,11 +159,13 @@ class FillUpForm extends Component {
       		<Input onChangeText={this.handleStreet} width={width - 10} alignItems="center" justifyContent="center" color="teal" height={50} borderRadius={8} borderBottomWidth={1} textAlign="center" placeholder="e.g. 123 Subd. / Villa Tamad Street" />
       		<Text>Barangay</Text>
       		<Input onChangeText={this.handleBrgy} width={width - 10} alignItems="center" justifyContent="center" color="teal" height={50} borderRadius={8} borderBottomWidth={1} textAlign="center" placeholder="e.g. San Juan Tamad" />
+          <Text>Municipality</Text>
+          <Input onChangeText={this.handleMunc} width={width - 10} alignItems="center" justifyContent="center" color="teal" height={50} borderRadius={8} borderBottomWidth={1} textAlign="center" placeholder="e.g. San Juan" />
       		<Text>City</Text>
       		<Input onChangeText={this.handleCity} width={width - 10} alignItems="center" justifyContent="center" color="teal" height={50} borderRadius={8} borderBottomWidth={1} textAlign="center" placeholder="e.g. Tobaco" />
       	</Card>
       	<Card alignItems="center" justifyContent="center">
-      	<Button onPress={()=>this.handleSubmit(serviceid,servicename,staffid,staffname)} width={width-100} height={40} backgroundColor="#246C34" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
+      	<Button onPress={()=>this.handleSubmit()} width={width-100} height={40} backgroundColor="#246C34" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
       		<Text style={[styles.header,{color: '#FFFFFF'}]}>Submit</Text>
       	</Button>
       	<Button onPress={()=> null} width={width-100} height={40} backgroundColor="gray" marginTop={10} alignItems="center" justifyContent="center" borderWidth={1} borderColor="#FFFFFF" borderRadius={8}>
@@ -178,6 +185,7 @@ var mapStateToProps = (state) =>{
   return{
       userid: state.customer.userid,
       username: state.customer.username,
+     
 }
 }
 

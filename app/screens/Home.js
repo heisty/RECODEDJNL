@@ -23,7 +23,11 @@ import {
   offlineLoginReset,
   returnActive,
   customerQueue,
-  unloggedUser
+  unloggedUser,
+  loginState,
+  findAddrExist,
+  alertMessageX,
+
 } from '../actions/customerActions';
 import {testServerConnection} from '../actions/connectionActions';
 import {deleteAvail} from '../actions/PopulateStaff';
@@ -53,11 +57,14 @@ class Home extends Component {
   }
   componentWillMount(){
     
-
+    
+    
+    
    
   }
   componentDidMount(){
 
+    
     if(this.props.offlineDisplay){
 
     }
@@ -69,6 +76,8 @@ class Home extends Component {
     this.props.dispatch(testServerConnection());
     this.props.dispatch(customerActive());
     this.props.dispatch(returnActive(this.props.userid));
+    this.props.dispatch(findAddrExist(this.props.userid));
+
 
     },3000)
 
@@ -88,13 +97,16 @@ class Home extends Component {
   }
  // RENDER
 
- showAlert=(message,description,type)=>{
-    showMessage({
-      message: message,
-      decription: description,
-      type: type
-    })
- }
+ showAlertX=(header,message)=>{
+      Alert.alert(
+      header,
+      message,
+      [{
+        text: 'Okay',
+      }],
+      {cancellable:false}
+      );
+ }  
 
  handleCancel = (availid) =>{
   this.props.dispatch(deleteAvail(availid));
@@ -117,13 +129,13 @@ class Home extends Component {
   }
 
   logout = () =>{
-      this.props.dispatch(unloggedUser());
+      this.props.dispatch(loginState(false));
       const resetActions = StackActions.reset({
         index:0,
         key: null,
         actions: [
             NavigationActions.navigate({
-            routeName: "componentNavigation",
+            routeName: "customerAuthNavigation",
           }),
         ]
       });
@@ -131,6 +143,10 @@ class Home extends Component {
     }
 
   render(){
+
+
+    
+   
 
     console.warn(this.props.userid);
    
@@ -148,8 +164,30 @@ class Home extends Component {
       password,
       activeservice,
       position,
-      total 
+      total,
+      found,
+      header,
+      message
     } = this.props;
+
+    if(header&&message){
+      this.showAlertX(header,message);
+      dispatch(alertMessageX(null,null));
+      const resetActions = StackActions.reset({
+        index:0,
+        key: null,
+        actions: [
+            NavigationActions.navigate({
+            routeName: "bottomNavigation",
+          }),
+        ]
+      });
+      this.props.navigation.dispatch(resetActions);
+    }
+
+     console.warn("FAE",found);
+
+    const {navigate} = this.props.navigation;
     console.warn(offlineDisplay);
 
     let status = null;
@@ -158,6 +196,10 @@ class Home extends Component {
     }
     else{
       status="Online";
+    }
+
+    if(found===false){
+      navigate("FillUpForm");
     }
      // if(offline && displayOffline){
      //  //this.showAlert("NO SERVER CONNECTION WHATSOEVER.","But don't worry, you can still use our app.","warning");
@@ -212,6 +254,9 @@ class Home extends Component {
     if(position>3&&position<10){
       postfix="th";
     }
+
+
+    
 
      
     return(
@@ -296,6 +341,9 @@ var mapStateToProps = (state) => {
    displayOffline: state.customer.displayOffline,
    total: state.customer.total,
    activeservice: state.customer.activeservice,
+    found: state.alert.found,
+    header: state.alert.header,
+    message: state.alert.message,
   
     
   }
